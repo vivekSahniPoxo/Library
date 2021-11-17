@@ -31,11 +31,12 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -52,11 +53,13 @@
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_btn"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/Identify_tab"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11">
@@ -115,11 +118,14 @@
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_btn"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/Inventory_Tab"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/search_tab">
@@ -138,7 +144,8 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Identify"
-                        android:textColor="#1293CD" android:textSize="20dp"
+                        android:textColor="#1293CD"
+                        android:textSize="20dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/imageView1"
                         app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +158,8 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Tab to Identify your book "
-                        android:textColor="#1293CD"   app:layout_constraintEnd_toStartOf="@+id/imageView1"
+                        android:textColor="#1293CD"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -159,10 +167,10 @@
                         android:id="@+id/imageView1"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:background="#88E8F4"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:background="#88E8F4"
                         android:src="@drawable/book_cell"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -176,11 +184,14 @@
                 android:layout_height="60dp"
 
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
+
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_btn"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/Tracking_tab"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Identify_tab">
@@ -199,7 +210,8 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Inventory"
-                        android:textColor="#1293CD"                        android:textSize="20dp"
+                        android:textColor="#1293CD"
+                        android:textSize="20dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/imageView2"
                         app:layout_constraintStart_toStartOf="parent"
@@ -212,7 +224,8 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Tab to Identify your Inventory "
-                        android:textColor="#1293CD"                        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                        android:textColor="#1293CD"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView2"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -220,9 +233,9 @@
                         android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:background="#88E8F4"
-
                         android:layout_marginBottom="8dp"
+
+                        android:background="#88E8F4"
                         android:src="@drawable/new_inventory"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -236,12 +249,13 @@
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="10dp"
-
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="32dp"
                 android:background="@drawable/custom_btn"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Inventory_Tab">
@@ -260,7 +274,8 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Tracking"
-                        android:textColor="#1293CD"                        android:textSize="20dp"
+                        android:textColor="#1293CD"
+                        android:textSize="20dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/imageView3"
                         app:layout_constraintStart_toStartOf="parent"
@@ -273,18 +288,19 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginEnd="32dp"
                         android:text="Tab to Track your Inventory "
-                        android:textColor="#1293CD"                        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                        android:textColor="#1293CD"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                     <ImageView
                         android:id="@+id/imageView3"
                         android:layout_width="wrap_content"
-                        android:background="#88E8F4"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:background="#88E8F4"
                         android:src="@drawable/tracking"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -311,8 +327,9 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="409dp"
-        android:layout_height="0dp"
+        android:layout_height="58dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
@@ -324,15 +341,17 @@
         <ImageView
             android:id="@+id/imageView5"
             android:layout_width="200dp"
-            android:layout_height="80dp"
+            android:layout_height="40dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:src="@drawable/logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

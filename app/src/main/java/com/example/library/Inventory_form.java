@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Inventory_form extends AppCompatActivity {
-    Spinner Select_Inventory, Inventory_Details;
+    Spinner Select_Inventory;
+    Spinner Inventory_Details;
     String[] value = new String[]{"Choose", "Title", "Author", "Department", "Shelves"};
     List<String> data_value;
     String inventory_details_option;
@@ -76,13 +77,16 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
-
+// Set up Detail Spinner
+        final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
+        spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        Inventory_Details.setAdapter(spinnerArrayAdapter1);
         Inventory_Details.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                inventory_details_option=parent.getItemAtPosition(position).toString();
-                System.out.println("Select Value "+inventory_details_option);
-                Toast.makeText(Inventory_form.this, "Select Value"+inventory_details_option, Toast.LENGTH_SHORT).show();
+                inventory_details_option = parent.getItemAtPosition(position).toString();
+                System.out.println("Select Value " + inventory_details_option);
+                Toast.makeText(Inventory_form.this, "Select Value" + inventory_details_option, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -92,9 +96,6 @@ public class Inventory_form extends AppCompatActivity {
         });
 
 
-        final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
-                    spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                    Inventory_Details.setAdapter(spinnerArrayAdapter1);
     }
 
 
