@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Search_Form">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/Search_Data"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/custom_edittext"
+            android:hint="Search"
+
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/Accession_no"
+            app:layout_constraintEnd_toStartOf="@+id/Search_b"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/Search_b"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/custom_btn"
+            android:text="Search"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/Add_accession"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/Search_Data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+            android:id="@+id/Accession_no"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/custom_edittext"
+            android:ems="10"
+            android:hint="Enter Accession No"
+            android:inputType="textPersonName"
+
+            android:paddingLeft="10dp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView_Accession"
+            app:layout_constraintEnd_toStartOf="@+id/Add_accession"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Search_Data" />
+
+
+        <Button
+            android:id="@+id/Add_accession"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/custom_btn"
+            android:text="Add"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView_Accession"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Accession_no"
+            app:layout_constraintTop_toBottomOf="@+id/Search_b" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_Accession"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+
+            android:background="#E4E6E6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Add_accession" />
+
+        <Button
+            android:id="@+id/Retry"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="102dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/custom_btn"
+            android:text="Retry"
+            android:textColor="@color/black"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/New_accession"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_Accession" />
+
+
+        <Button
+            android:id="@+id/New_accession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/custom_btn"
+            android:text="New"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Retry"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_Accession"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
