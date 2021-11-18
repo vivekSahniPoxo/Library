@@ -22,7 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Identify_Form extends AppCompatActivity {
-    Button Search;
+    Button Search,NEW_data;
+
     EditText search_key;
     TextView LibraryItemType, BookAddedIn, BookCategory, ItemStatus, SubjectTitle, Language, Edition, Publisher, RFIDNo, AccessNo, Author, Title, YearOfPublication, EntryDate;
     //   ProgressDialog dialog = new ProgressDialog(this);
@@ -35,6 +36,7 @@ public class Identify_Form extends AppCompatActivity {
         setContentView(R.layout.activity_identify_form);
         Search = findViewById(R.id.Search_rfid_button);
         LibraryItemType = findViewById(R.id.Library_item);
+        NEW_data=findViewById(R.id.New_accession);
         BookAddedIn = findViewById(R.id.Book_Add);
         BookCategory = findViewById(R.id.BookCategory);
         ItemStatus = findViewById(R.id.Item_status);
@@ -51,6 +53,14 @@ public class Identify_Form extends AppCompatActivity {
         dialog = new ProgressDialog(this);
 
 
+        NEW_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClearData();
+            }
+        });
+
+
         search_key = findViewById(R.id.Search_key);
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +75,25 @@ public class Identify_Form extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void ClearData() {
+
+        LibraryItemType.setText("");
+        BookAddedIn.setText("");
+        BookCategory.setText("");
+        ItemStatus.setText("");
+        SubjectTitle.setText("");
+        Language.setText("");
+        Edition.setText("");
+        Publisher.setText("");
+        RFIDNo.setText("");
+        AccessNo.setText("");
+        Author.setText("");
+        Title.setText("");
+        YearOfPublication.setText("");
+        EntryDate.setText("");
+
     }
 
     private void FetchData() throws JSONException {

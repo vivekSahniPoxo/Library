@@ -26,6 +26,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_settings_24" />
+       <TextView
+           android:id="@+id/textView34"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="32dp"
+           android:text="Dashboard"
+           android:textColor="@color/white"
+           android:textStyle="bold"
+           android:fontFamily="sans-serif"
+           android:textAlignment="center"
+           android:textSize="20dp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toStartOf="@+id/imageView4"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
@@ -33,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
@@ -272,12 +288,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="32dp"
-                        android:text="Tracking"
+                        android:text="Racking"
                         android:textColor="#1293CD"
                         android:textSize="20dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -289,6 +307,7 @@
                         android:layout_marginEnd="32dp"
                         android:text="Tab to Track your Inventory "
                         android:textColor="#1293CD"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/imageView3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView8" />
