@@ -34,6 +34,7 @@ public class Identify_Form extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify_form);
+        search_key=findViewById(R.id.Search_key);
         Search = findViewById(R.id.Search_rfid_button);
         LibraryItemType = findViewById(R.id.Library_item);
         NEW_data=findViewById(R.id.New_accession);
@@ -102,7 +103,7 @@ public class Identify_Form extends AppCompatActivity {
 
         JSONObject obj = new JSONObject();
 //
-        obj.put("RFIDNo", "E2801170000002142498B9A2");
+        obj.put("AccessNo",search_key.getText().toString() );
 //        obj.put("RFIDNo", search_key.getText().toString());
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, url, obj,

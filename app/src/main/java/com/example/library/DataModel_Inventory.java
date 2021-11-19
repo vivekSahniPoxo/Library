@@ -5,12 +5,23 @@ public class DataModel_Inventory {
     String AccessNo;
     String Author;
     String Title;
-
+    private String color;
     public DataModel_Inventory(String RFIDNo, String accessNo, String author, String title) {
         this.RFIDNo = RFIDNo;
         AccessNo = accessNo;
         Author = author;
         Title = title;
+    }
+
+    public DataModel_Inventory() {
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getRFIDNo() {

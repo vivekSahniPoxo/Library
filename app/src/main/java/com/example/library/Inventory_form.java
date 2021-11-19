@@ -2,6 +2,7 @@ package com.example.library;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,8 +42,16 @@ public class Inventory_form extends AppCompatActivity {
     List<String> data_value;
     String inventory_details_option, Select_option;
     ProgressDialog dialog;
-    Button search_book;
+    Button search_book, Search;
     List<DataModel_Inventory> List_Inventory;
+    TextView total, found, not_found;
+    Adapter_Inventory adapter_list;
+    RecyclerView recyclerView;
+    EditText Accession;
+    DataModel_Inventory dataModel_inventory;
+    String founded;
+    int counter = 0;
+    int len;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +63,32 @@ public class Inventory_form extends AppCompatActivity {
         Inventory_Details = findViewById(R.id.spinner_details);
         dialog = new ProgressDialog(this);
         search_book = findViewById(R.id.Search_Books);
+        total = findViewById(R.id.Total);
+        found = findViewById(R.id.Found);
+        not_found = findViewById(R.id.not_found);
+        recyclerView = findViewById(R.id.recyclerView);
+        Search = findViewById(R.id.Search_);
+        Accession = findViewById(R.id.Search_Data);
+        dataModel_inventory = new DataModel_Inventory();
+
+//        founded = dataModel_inventory.getColor();
+//        Toast.makeText(Inventory_form.this, founded, Toast.LENGTH_SHORT).show();
+        Search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Search_value = Accession.getText().toString();
+                adapter_list.getFilter(Search_value);
+                count();
+                Accession.setText("");
+            }
+        });
+
 
         search_book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    List_Inventory.clear();
                     FetchData(inventory_details_option, Select_option);
                     dialog.show();
                     dialog.setMessage("Fetching...");
@@ -79,11 +111,17 @@ public class Inventory_form extends AppCompatActivity {
         spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         Select_Inventory.setAdapter(spinnerArrayAdapter);
 
-
+//             Select_Inventory.setOnClickListener(new View.OnClickListener() {
+//                 @Override
+//                 public void onClick(View v) {
+//                     List_Inventory.clear();
+//                 }
+//             });
         // Implemented onSelected Listener on Spinner
         Select_Inventory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if (position == 1) {
                     String url = "https://library.poxorfid.com/api/Inventory/FetchTitles";
                     SelectByTitle(url);
@@ -129,6 +167,7 @@ public class Inventory_form extends AppCompatActivity {
         final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
         spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         Inventory_Details.setAdapter(spinnerArrayAdapter1);
+
         Inventory_Details.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -144,9 +183,23 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
-
+        total.setText(String.valueOf(len));
+        String l=String.valueOf(len-counter);
+        not_found.setText(l);
+        found.setText(String.valueOf(counter));
     }
 
+    public void count() {
+
+        while (dataModel_inventory.getColor() != null) {
+
+        }
+        counter++;
+
+        System.out.println(counter + "Search DATA ");
+
+
+    }
 
     public void SelectByTitle(String url) {
 
@@ -157,6 +210,7 @@ public class Inventory_form extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         data_value.add(jsonArray.getString(i));
@@ -192,47 +246,10 @@ public class Inventory_form extends AppCompatActivity {
         String url = "https://library.poxorfid.com/api/Inventory/InventoryRecords";
 
         JSONObject obj = new JSONObject();
-//
 //        obj.put("AccessNo", "B1228");
         obj.put("SearchParameter", select_option.trim());
         obj.put("SearchValue", inventory_details_option.trim());
         RequestQueue queue = Volley.newRequestQueue(this);
-//        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, url, obj,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                        //    JSONObject jsonObject = new JSONObject(response);
-//                            JSONArray array = new JSONArray(response);
-//                            for (int i = 0; i < array.length(); i++) {
-//                                JSONObject object = array.getJSONObject(i);
-//                                String RFIDNo = object.getString("RFIDNo");
-//                                String AccessNo = object.getString("AccessNo");
-//                                String Author = object.getString("Author");
-//                                String Title = object.getString("Title");
-//                                List_Inventory.add(new DataModel_Inventory(RFIDNo, AccessNo, Author, Title));
-//                            }
-//                            System.out.println("New Data List" + List_Inventory);
-//
-////                            list_data.add(new Data_Model_Search(access_details, Title));
-////                            adapter_list = new Adapter_list(list_data, getApplicationContext());
-////                            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-////                            recyclerView.setAdapter(adapter_list);
-//                            dialog.dismiss();
-//                            Log.e("response Search", response.toString());
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-////                        hideProgressDialog();
-//                        dialog.dismiss();
-//                        System.out.println("Negative Response" + error.getMessage());
-//                    }
-//                });
 
 
         final String requestBody = obj.toString();
@@ -242,13 +259,24 @@ public class Inventory_form extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONArray array = new JSONArray(response);
-                    JSONObject object = array.getJSONObject(1);
-                    String RFIDNo = object.getString("RFIDNo");
-                    String AccessNo = object.getString("AccessNo");
-                    String Author = object.getString("Author");
-                    String Title = object.getString("Title");
-                    List_Inventory.add(new DataModel_Inventory(RFIDNo, AccessNo, Author, Title));
 
+                    len = array.length();
+
+
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        String RFIDNo = object.getString("RFIDNo");
+                        String AccessNo = object.getString("AccessNo");
+                        String Author = object.getString("Author");
+                        String Title = object.getString("Title");
+                        List_Inventory.add(new DataModel_Inventory(RFIDNo, AccessNo, Author, Title));
+
+
+                    }
+                    adapter_list = new Adapter_Inventory(List_Inventory, getApplicationContext());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    recyclerView.setAdapter(adapter_list);
+                    dialog.dismiss();
 //                    Toast.makeText(Inventory_form.this, name, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

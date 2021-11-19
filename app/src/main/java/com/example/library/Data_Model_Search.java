@@ -24,6 +24,7 @@ public class Data_Model_Search {
 //    }
 
 
+
     public Data_Model_Search(String accessNo, String title) {
         this.accessNo = accessNo;
         this.title = title;
