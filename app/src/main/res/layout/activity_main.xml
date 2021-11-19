@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/_Setting"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -38,7 +38,7 @@
            android:textAlignment="center"
            android:textSize="20dp"
            app:layout_constraintBottom_toBottomOf="parent"
-           app:layout_constraintEnd_toStartOf="@+id/imageView4"
+           app:layout_constraintEnd_toStartOf="@+id/_Setting"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toTopOf="parent" />
 

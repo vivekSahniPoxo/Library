@@ -83,7 +83,6 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
                     row.setColor("Green");
                     notifyDataSetChanged();
                 }
-
             }
         }  else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();

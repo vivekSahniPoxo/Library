@@ -94,6 +94,8 @@ public class Identify_Form extends AppCompatActivity {
         Title.setText("");
         YearOfPublication.setText("");
         EntryDate.setText("");
+        search_key.setText("");
+
 
     }
 

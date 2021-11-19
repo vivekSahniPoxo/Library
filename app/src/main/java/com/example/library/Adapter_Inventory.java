@@ -37,7 +37,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         holder.accession_num.setText(dataModel_inventory.getAccessNo());
         holder.subject_Tilte.setText(dataModel_inventory.getTitle());
         if (dataModel_inventory.getColor() == "Green") {
-            holder.cardView.setCardBackgroundColor(Color.GREEN);
+            holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
         }
     }
 
@@ -60,16 +60,15 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         }
     }
 
-    public void getFilter(String search_value) {
+    public int getFilter(String search_value) {
         String charString = search_value;
+        int bookFooundCount = 0;
         if (!charString.isEmpty()) {
 
             for (DataModel_Inventory row : list) {
-
-
-                if (row.getAccessNo().contains(charString) || row.getTitle().contains(charString)) {
-
+                if (row.getAccessNo().matches(charString) || row.getTitle().matches(charString)) {
                     row.setColor("Green");
+                    bookFooundCount = bookFooundCount+1;
                     notifyDataSetChanged();
                 }
 
@@ -77,5 +76,6 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         }  else {
             Toast.makeText(c.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
         }
+        return  bookFooundCount;
     }
 }

@@ -77,8 +77,9 @@ public class Inventory_form extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String Search_value = Accession.getText().toString();
-                adapter_list.getFilter(Search_value);
-                count();
+                int countResult =   adapter_list.getFilter(Search_value);
+                found.setText(String.valueOf(countResult));
+//                count();
                 Accession.setText("");
             }
         });
@@ -183,21 +184,24 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
-        total.setText(String.valueOf(len));
-        String l=String.valueOf(len-counter);
-        not_found.setText(l);
-        found.setText(String.valueOf(counter));
+
     }
 
     public void count() {
 
-        while (dataModel_inventory.getColor() != null) {
+        while (dataModel_inventory.getColor() == "Green") {
 
+            System.out.println(counter + "Search DATA ");
         }
         counter++;
 
         System.out.println(counter + "Search DATA ");
 
+        int not_founded=len-counter;
+
+        total.setText(String.valueOf(len));
+        found.setText(String.valueOf(counter));
+        not_found.setText(String.valueOf(not_founded));
 
     }
 
