@@ -39,6 +39,11 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         if (dataModel_inventory.getColor() == "Green") {
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
         }
+        else
+        {
+            holder.cardView.setCardBackgroundColor(Color.WHITE);
+
+        }
     }
 
     @Override

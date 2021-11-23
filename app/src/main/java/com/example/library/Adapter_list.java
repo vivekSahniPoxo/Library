@@ -46,7 +46,9 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
         holder.accession_num.setText(model_search.getAccessNo());
         holder.subject_Tilte.setText(model_search.getTitle());
         if (model_search.getColor() == "Green") {
-            holder.cardView.setCardBackgroundColor(Color.GREEN);
+            holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
+        }else {
+            holder.cardView.setCardBackgroundColor(Color.WHITE);
         }
     }
 
@@ -78,11 +80,12 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             for (Data_Model_Search row : list) {
 
 
-                if (row.getAccessNo().contains(charString)) {
+                if (row.getAccessNo().matches(charString)) {
 
                     row.setColor("Green");
                     notifyDataSetChanged();
                 }
+
             }
         }  else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();

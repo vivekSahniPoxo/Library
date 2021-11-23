@@ -31,9 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Inventory_form extends AppCompatActivity {
     Spinner Select_Inventory;
@@ -42,7 +45,7 @@ public class Inventory_form extends AppCompatActivity {
     List<String> data_value;
     String inventory_details_option, Select_option;
     ProgressDialog dialog;
-    Button search_book, Search;
+    Button search_book, Search, Submit;
     List<DataModel_Inventory> List_Inventory;
     TextView total, found, not_found;
     Adapter_Inventory adapter_list;
@@ -70,6 +73,20 @@ public class Inventory_form extends AppCompatActivity {
         Search = findViewById(R.id.Search_);
         Accession = findViewById(R.id.Search_Data);
         dataModel_inventory = new DataModel_Inventory();
+        Submit = findViewById(R.id.Submit_Button);
+        Submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    dialog.show();
+                    dialog.setMessage("Fetching...");
+                    dialog.setCancelable(false);
+                    submit_Report();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 //        founded = dataModel_inventory.getColor();
 //        Toast.makeText(Inventory_form.this, founded, Toast.LENGTH_SHORT).show();
@@ -77,10 +94,10 @@ public class Inventory_form extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String Search_value = Accession.getText().toString();
-                int countResult =   adapter_list.getFilter(Search_value);
-                found.setText(String.valueOf(countResult));
-//                count();
+                int countResult = adapter_list.getFilter(Search_value);
+//                found.setText(String.valueOf(countResult));count();
                 Accession.setText("");
+                count();
             }
         });
 
@@ -187,6 +204,64 @@ public class Inventory_form extends AppCompatActivity {
 
     }
 
+    private void submit_Report() throws JSONException {
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+        String url = " https://library.poxorfid.com/api/Inventory/SubmitInventoyRecord";
+        JSONArray array = new JSONArray();
+        JSONObject object = new JSONObject();
+        object.put("inventoryID", "");
+        object.put("inventoryBasedOn", "Title");
+        object.put("doneBy", "Admin");
+        object.put("total", "100");
+        object.put("found", "20");
+        object.put("notFound", "80");
+        object.put("date", currentDate);
+
+        JSONObject obj = new JSONObject();
+        obj.put("rfidNo", "");
+        obj.put("foundStatus", "");
+        array.put(obj);
+        object.put("inventoryList", obj.toString());
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+
+        final String requestBody = obj.toString();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(Inventory_form.this, "Submitted....", Toast.LENGTH_SHORT).show();
+                Log.i("VOLLEY Submit", response);
+                dialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY Negative", error.toString());
+                dialog.dismiss();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+        };
+
+        queue.add(stringRequest);
+    }
+
+
     public void count() {
 
         while (dataModel_inventory.getColor() == "Green") {
@@ -197,7 +272,7 @@ public class Inventory_form extends AppCompatActivity {
 
         System.out.println(counter + "Search DATA ");
 
-        int not_founded=len-counter;
+        int not_founded = len - counter;
 
         total.setText(String.valueOf(len));
         found.setText(String.valueOf(counter));
@@ -248,11 +323,11 @@ public class Inventory_form extends AppCompatActivity {
     private void FetchData(String inventory_details_option, String select_option) throws JSONException {
 
         String url = "https://library.poxorfid.com/api/Inventory/InventoryRecords";
-
         JSONObject obj = new JSONObject();
 //        obj.put("AccessNo", "B1228");
         obj.put("SearchParameter", select_option.trim());
         obj.put("SearchValue", inventory_details_option.trim());
+
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
