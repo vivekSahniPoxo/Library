@@ -24,11 +24,17 @@ public class Data_Model_Search {
 //    }
 
 
-
-    public Data_Model_Search(String accessNo, String title) {
+    public Data_Model_Search(String publisher, String rFIDNo, String accessNo, String title) {
+        this.publisher = publisher;
+        this.rFIDNo = rFIDNo;
         this.accessNo = accessNo;
         this.title = title;
     }
+
+//    public Data_Model_Search(String accessNo, String title) {
+//        this.accessNo = accessNo;
+//        this.title = title;
+//    }
 
     public String getColor() {
         return color;

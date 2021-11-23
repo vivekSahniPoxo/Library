@@ -126,8 +126,10 @@ public class Search_Form extends AppCompatActivity {
 
                             String access_details = response.getString("AccessNo");
                             String Title = response.getString("Title");
+                            String publisher=response.getString("Publisher");
+                            String rfid=response.getString("RFIDNo");
 
-                            list_data.add(new Data_Model_Search(access_details, Title));
+                            list_data.add(new Data_Model_Search(publisher,rfid,access_details, Title));
                              adapter_list = new Adapter_list(list_data, getApplicationContext());
                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             recyclerView.setAdapter(adapter_list);

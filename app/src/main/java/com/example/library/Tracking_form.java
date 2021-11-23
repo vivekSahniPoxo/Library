@@ -3,6 +3,7 @@ package com.example.library;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ public class Tracking_form extends AppCompatActivity {
     Button Add_Racking;
     List<String> rack_no;
     String rack_Number_Selected;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class Tracking_form extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        FetchRack_NO();
+//        FetchRack_NO();
 
 
         //Initialize List
@@ -85,7 +87,10 @@ public class Tracking_form extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Update_sgelve();
+                    dialog.show();
+                    dialog.setMessage("Fetching...");
+                    dialog.setCancelable(false);
+                    Update_shelve();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -143,11 +148,12 @@ public class Tracking_form extends AppCompatActivity {
 
 
         final String requestBody = "R1234";//obj.toString();
+//
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(Tracking_form.this, "Getting response"+response, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Tracking_form.this, "Data Updated Successfully....", Toast.LENGTH_SHORT).show();
 
                 Log.i("VOLLEY", response);
 //                dialog.dismiss();
@@ -161,25 +167,24 @@ public class Tracking_form extends AppCompatActivity {
         }) {
             @Override
             public String getBodyContentType() {
-                return String.format("application/json");
+                return "application/json; charset=utf-8";
             }
 
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
-                    return (requestBody).getBytes("utf-8");
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                            requestBody, "utf-8");
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
                     return null;
                 }
             }
         };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, -1, 0));
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, -1, 0));
         queue.add(stringRequest);
     }
 
-    private void Update_sgelve() throws JSONException {
+    private void Update_shelve() throws JSONException {
 
         String url = "https://library.poxorfid.com/api/Inventory/UpdateBookLocation";
         JSONArray array = new JSONArray();
@@ -200,13 +205,13 @@ public class Tracking_form extends AppCompatActivity {
                 Toast.makeText(Tracking_form.this, "Data Updated Successfully....", Toast.LENGTH_SHORT).show();
 
                 Log.i("VOLLEY", response);
-//                dialog.dismiss();
+                dialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VOLLEY Negative", error.toString());
-//                dialog.dismiss();
+                dialog.dismiss();
             }
         }) {
             @Override

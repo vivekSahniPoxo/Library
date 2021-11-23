@@ -44,6 +44,25 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
         Data_Model_Search model_search = list.get(position);
         holder.accession_num.setText(model_search.getAccessNo());
+        holder.Title_Details.setText(model_search.getTitle());
+        holder.Author_Details.setText(model_search.getPublisher());
+        holder.RFid_details.setText(model_search.getrFIDNo());
+        holder.Access_detail.setText(model_search.getAccessNo());
+        holder.Language.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.card_details.setVisibility(View.GONE);
+                holder.cardView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        holder.subject_Tilte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.card_details.setVisibility(View.VISIBLE);
+                holder.cardView.setVisibility(View.GONE);
+            }
+        });
         holder.subject_Tilte.setText(model_search.getTitle());
         if (model_search.getColor() == "Green") {
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
@@ -59,9 +78,9 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
 
     public class myviewholder extends RecyclerView.ViewHolder {
-        TextView accession_num, subject_Tilte;
+        TextView accession_num, subject_Tilte,Language,Access_detail,RFid_details,Author_Details,Title_Details;
         LinearLayout list_layout;
-        CardView cardView;
+        CardView cardView,card_details;
 
         public myviewholder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +88,12 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             subject_Tilte = itemView.findViewById(R.id.subject_Tilte);
             list_layout = itemView.findViewById(R.id.list_layout);
             cardView = itemView.findViewById(R.id.cardView);
+            card_details=itemView.findViewById(R.id.cardView_Details);
+            Language=itemView.findViewById(R.id.Language);
+            Access_detail=itemView.findViewById(R.id.Booktitle);
+            RFid_details=itemView.findViewById(R.id.RFID_NO);
+            Author_Details=itemView.findViewById(R.id.Authorname);
+            Title_Details=itemView.findViewById(R.id.EntryDate);
         }
     }
 

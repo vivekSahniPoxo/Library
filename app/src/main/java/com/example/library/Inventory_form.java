@@ -52,7 +52,8 @@ public class Inventory_form extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText Accession;
     DataModel_Inventory dataModel_inventory;
-    String founded;
+    String Submit_rfid;
+    boolean submit_foundStatus;
     int counter = 0;
     int len;
 
@@ -87,6 +88,14 @@ public class Inventory_form extends AppCompatActivity {
                 }
             }
         });
+
+
+        if (dataModel_inventory.getColor() == "Green") {
+            Submit_rfid = dataModel_inventory.getRFIDNo();
+            submit_foundStatus = true;
+        } else {
+            submit_foundStatus = false;
+        }
 
 //        founded = dataModel_inventory.getColor();
 //        Toast.makeText(Inventory_form.this, founded, Toast.LENGTH_SHORT).show();
@@ -211,16 +220,16 @@ public class Inventory_form extends AppCompatActivity {
         JSONArray array = new JSONArray();
         JSONObject object = new JSONObject();
         object.put("inventoryID", "");
-        object.put("inventoryBasedOn", "Title");
+        object.put("inventoryBasedOn", Select_option);
         object.put("doneBy", "Admin");
-        object.put("total", "100");
-        object.put("found", "20");
-        object.put("notFound", "80");
+        object.put("total", total);
+        object.put("found", found);
+        object.put("notFound", not_found);
         object.put("date", currentDate);
 
         JSONObject obj = new JSONObject();
-        obj.put("rfidNo", "");
-        obj.put("foundStatus", "");
+        obj.put("rfidNo", Submit_rfid);
+        obj.put("foundStatus", submit_foundStatus);
         array.put(obj);
         object.put("inventoryList", obj.toString());
         RequestQueue queue = Volley.newRequestQueue(this);
