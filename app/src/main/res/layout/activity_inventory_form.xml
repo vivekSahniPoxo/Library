@@ -13,7 +13,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="#3F9AC3"
+        android:background="#0000ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,66 +35,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:text="Inventory"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             android:fontFamily="sans-serif"
+            android:text="Inventory"
             android:textAlignment="center"
+            android:textColor="@color/Text_color"
             android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="Inventory On "
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_details"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Spinner
-        android:id="@+id/spinner_details"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-
-        app:layout_constraintEnd_toStartOf="@+id/Search_Books"
-        app:layout_constraintStart_toEndOf="@+id/spinner"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/Search_Books"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Filter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spinner_details"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
     <ScrollView
@@ -105,49 +57,151 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Search_Books">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner">
 
-
-            <EditText
-                android:id="@+id/Search_Data"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                android:layout_marginBottom="8dp"
-
-                android:background="@drawable/custom_edittext"
-                android:drawableRight="@drawable/ic_baseline_search_24"
-                android:hint="Search"
-                android:paddingLeft="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-                app:layout_constraintEnd_toStartOf="@+id/Search_"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="350dp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/section_A"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="10dp"
                 android:layout_marginTop="8dp"
-                android:background="#E2F4F4"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:text="Inventory On "
+                        android:textColor="@color/Text_color"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/Search_Data"
+                        app:layout_constraintEnd_toStartOf="@+id/spinner_details"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                    <Spinner
+                        android:id="@+id/spinner_details"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+
+                        app:layout_constraintEnd_toStartOf="@+id/Search_Books"
+                        app:layout_constraintStart_toEndOf="@+id/spinner"
+                        app:layout_constraintTop_toBottomOf="@+id/textView"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <Button
+                        android:id="@+id/Search_Books"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/custom_btn"
+                        android:text="Filter"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/spinner_details"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                    <EditText
+                        android:id="@+id/Search_Data"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="10dp"
+
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/custom_edittext"
+                        android:drawableRight="@drawable/ic_baseline_search_24"
+                        android:hint="Search"
+                        android:paddingLeft="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/Search_"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Search_Books"
+                        app:layout_constraintVertical_bias="1.0" />
+
+
+                    <Button
+                        android:id="@+id/Search_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/custom_btn"
+                        android:text="Search"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/Search_Data"
+                        app:layout_constraintTop_toBottomOf="@+id/Search_Books" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview_recycvlerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/cardView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Search_Data" />
+                app:layout_constraintTop_toBottomOf="@id/section_A">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:background="@color/white" />
+            </androidx.cardview.widget.CardView>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
@@ -156,18 +210,19 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+                app:layout_constraintTop_toBottomOf="@+id/cardview_recycvlerview">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
 
                     <TextView
@@ -179,7 +234,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="Total"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toStartOf="@+id/textView31"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -193,7 +248,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="Found"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toStartOf="@+id/textView32"
                         app:layout_constraintStart_toEndOf="@+id/textView28"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -207,7 +262,7 @@
                         android:layout_marginEnd="24dp"
                         android:text="Not Found"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView31"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -222,12 +277,27 @@
                         android:layout_marginBottom="8dp"
                         android:text="--"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/Found"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView28"
                         app:layout_constraintVertical_bias="0.0" />
+
+
+                    <Button
+                        android:id="@+id/Submit_Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/custom_btn"
+                        android:text="Submit"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toStartOf="@+id/Back_Button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/Total" />
 
                     <TextView
                         android:id="@+id/Found"
@@ -235,15 +305,42 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
                         android:text="--"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toStartOf="@+id/not_found"
                         app:layout_constraintStart_toEndOf="@+id/Total"
-                        app:layout_constraintTop_toBottomOf="@+id/textView31"
-                        app:layout_constraintVertical_bias="0.062" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+                    <Button
+                        android:id="@+id/Back_Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/custom_btn"
+                        android:text="Back"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/New_Button"
+                        app:layout_constraintStart_toEndOf="@+id/Submit_Button"
+                        app:layout_constraintTop_toBottomOf="@+id/Found" />
+
+                    <Button
+                        android:id="@+id/New_Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/custom_btn"
+                        android:text="New"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/Back_Button"
+                        app:layout_constraintTop_toBottomOf="@+id/not_found" />
 
                     <TextView
                         android:id="@+id/not_found"
@@ -254,7 +351,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="--"
                         android:textAlignment="center"
-                        android:textColor="#0C0000"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/Found"
@@ -265,67 +362,8 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2">
 
 
-                <Button
-                    android:id="@+id/Submit_Button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="Submit"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/button4"
-                    app:layout_constraintHorizontal_bias="0.49"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="Back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/button5"
-                    app:layout_constraintStart_toEndOf="@+id/Submit_Button"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/button5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="Cancel"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/button4"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/Search_"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Search"
-                app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/Search_Data"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

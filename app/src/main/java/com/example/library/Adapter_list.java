@@ -43,12 +43,16 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
     public void onBindViewHolder(@NonNull myviewholder holder, int position) {
 
         Data_Model_Search model_search = list.get(position);
-        holder.accession_num.setText(model_search.getAccessNo());
-        holder.Title_Details.setText(model_search.getTitle());
-        holder.Author_Details.setText(model_search.getPublisher());
-        holder.RFid_details.setText(model_search.getrFIDNo());
-        holder.Access_detail.setText(model_search.getAccessNo());
-        holder.Language.setOnClickListener(new View.OnClickListener() {
+        holder.Title.setText(model_search.getTitle());
+        holder.publisher.setText(model_search.getPublisher());
+        holder.Subject.setText(model_search.getSubjectTitle());
+        holder.author.setText(model_search.getAuthor());
+        holder.edition.setText(model_search.getEdition());
+        holder.language.setText(model_search.getLanguage());
+        holder.access_No.setText(model_search.getAccessNo());
+        holder.head_title.setText(model_search.getAccessNo());
+        holder.head_subject.setText(model_search.getTitle());
+        holder.access_No.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.card_details.setVisibility(View.GONE);
@@ -56,19 +60,30 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             }
         });
 
-        holder.subject_Tilte.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.card_details.setVisibility(View.VISIBLE);
-                holder.cardView.setVisibility(View.GONE);
-            }
-        });
-        holder.subject_Tilte.setText(model_search.getTitle());
+
         if (model_search.getColor() == "Green") {
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
-        }else {
+            holder.head_subject.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.head_title.setTextColor(Color.parseColor("#FFFFFF"));
+            holder.head_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.card_details.setVisibility(View.VISIBLE);
+
+
+//                holder.cardView.setVisibility(View.GONE);
+                }
+            });
+//            holder.Title_Details.setTextColor(Color.parseColor("#FFFFFF"));
+//            holder.Author_Details.setTextColor(Color.parseColor("#FFFFFF"));
+//            holder.RFid_details.setTextColor(Color.parseColor("#FFFFFF"));
+//            holder.Access_detail.setTextColor(Color.parseColor("#FFFFFF"));
+
+        } else {
             holder.cardView.setCardBackgroundColor(Color.WHITE);
+
         }
+
     }
 
     @Override
@@ -78,22 +93,25 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
 
     public class myviewholder extends RecyclerView.ViewHolder {
-        TextView accession_num, subject_Tilte,Language,Access_detail,RFid_details,Author_Details,Title_Details;
+        TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title;
         LinearLayout list_layout;
-        CardView cardView,card_details;
+        CardView cardView, card_details;
 
         public myviewholder(@NonNull View itemView) {
             super(itemView);
-            accession_num = itemView.findViewById(R.id.access_num);
-            subject_Tilte = itemView.findViewById(R.id.subject_Tilte);
+            Subject = itemView.findViewById(R.id.Subject);
+            Title = itemView.findViewById(R.id.Booktitle);
             list_layout = itemView.findViewById(R.id.list_layout);
             cardView = itemView.findViewById(R.id.cardView);
-            card_details=itemView.findViewById(R.id.cardView_Details);
-            Language=itemView.findViewById(R.id.Language);
-            Access_detail=itemView.findViewById(R.id.Booktitle);
-            RFid_details=itemView.findViewById(R.id.RFID_NO);
-            Author_Details=itemView.findViewById(R.id.Authorname);
-            Title_Details=itemView.findViewById(R.id.EntryDate);
+            card_details = itemView.findViewById(R.id.cardView_Details);
+            publisher = itemView.findViewById(R.id.Publisher);
+            author = itemView.findViewById(R.id.Authorname);
+            edition = itemView.findViewById(R.id.Edition);
+            language = itemView.findViewById(R.id.Language);
+            access_No = itemView.findViewById(R.id.Access_No);
+            head_subject = itemView.findViewById(R.id.Head_subject);
+            head_title = itemView.findViewById(R.id.Head_Tilte);
+
         }
     }
 
@@ -112,7 +130,7 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
                 }
 
             }
-        }  else {
+        } else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
         }
     }

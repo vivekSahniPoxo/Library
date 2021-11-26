@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,11 +43,11 @@ import java.util.Locale;
 public class Inventory_form extends AppCompatActivity {
     Spinner Select_Inventory;
     Spinner Inventory_Details;
-    String[] value = new String[]{"Choose", "Title", "Author", "Department", "Shelves"};
+    String[] value = new String[]{"Choose", "Title", "Author", "Department", "Racks"};
     List<String> data_value;
     String inventory_details_option, Select_option;
     ProgressDialog dialog;
-    Button search_book, Search, Submit;
+    Button search_book, Search, Submit, NewBtn, Back_Btn;
     List<DataModel_Inventory> List_Inventory;
     TextView total, found, not_found;
     Adapter_Inventory adapter_list;
@@ -55,7 +57,7 @@ public class Inventory_form extends AppCompatActivity {
     String Submit_rfid;
     boolean submit_foundStatus;
     int counter = 0;
-    int len;
+    int len, not_founded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +75,31 @@ public class Inventory_form extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         Search = findViewById(R.id.Search_);
         Accession = findViewById(R.id.Search_Data);
+        NewBtn = findViewById(R.id.New_Button);
+        Back_Btn = findViewById(R.id.Back_Button);
         dataModel_inventory = new DataModel_Inventory();
         Submit = findViewById(R.id.Submit_Button);
+
+        NewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clear();
+            }
+        });
+        Back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Inventory_form.this, MainActivity.class));
+                finish();
+            }
+        });
+
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
                     submit_Report();
                 } catch (JSONException e) {
@@ -90,20 +109,13 @@ public class Inventory_form extends AppCompatActivity {
         });
 
 
-        if (dataModel_inventory.getColor() == "Green") {
-            Submit_rfid = dataModel_inventory.getRFIDNo();
-            submit_foundStatus = true;
-        } else {
-            submit_foundStatus = false;
-        }
-
 //        founded = dataModel_inventory.getColor();
 //        Toast.makeText(Inventory_form.this, founded, Toast.LENGTH_SHORT).show();
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Search_value = Accession.getText().toString();
-                int countResult = adapter_list.getFilter(Search_value);
+                adapter_list.getFilter(Search_value);
 //                found.setText(String.valueOf(countResult));count();
                 Accession.setText("");
                 count();
@@ -118,7 +130,7 @@ public class Inventory_form extends AppCompatActivity {
                     List_Inventory.clear();
                     FetchData(inventory_details_option, Select_option);
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -153,7 +165,7 @@ public class Inventory_form extends AppCompatActivity {
                     String url = "https://library.poxorfid.com/api/Inventory/FetchTitles";
                     SelectByTitle(url);
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
 
 ////                    Toast.makeText(Inventory_form.this,"Title",Toast.LENGTH_LONG).show();
@@ -161,7 +173,7 @@ public class Inventory_form extends AppCompatActivity {
                     String url = "https://library.poxorfid.com/api/Inventory/FetchAuthor";
                     SelectByTitle(url);
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
 
 //                    Toast.makeText(Inventory_form.this,"Author",Toast.LENGTH_LONG).show();
@@ -170,14 +182,14 @@ public class Inventory_form extends AppCompatActivity {
                     String url = "https://library.poxorfid.com/api/Inventory/FetchDepartments";
                     SelectByTitle(url);
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
 
                 } else if (position == 4) {
                     String url = "https://library.poxorfid.com/api/Inventory/FetchShelves";
                     SelectByTitle(url);
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
 
                 }
@@ -210,10 +222,23 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
+        found.setText("0");
+        not_found.setText("0");
+        total.setText(String.valueOf(len));
 
     }
 
     private void submit_Report() throws JSONException {
+
+        if (dataModel_inventory.getColor() == "Green") {
+            Submit_rfid = dataModel_inventory.getrFIDNo();
+            submit_foundStatus = true;
+        } else {
+            submit_foundStatus = false;
+            Submit_rfid = dataModel_inventory.getrFIDNo();
+
+        }
+
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
         String url = " https://library.poxorfid.com/api/Inventory/SubmitInventoyRecord";
@@ -222,25 +247,25 @@ public class Inventory_form extends AppCompatActivity {
         object.put("inventoryID", "");
         object.put("inventoryBasedOn", Select_option);
         object.put("doneBy", "Admin");
-        object.put("total", total);
-        object.put("found", found);
-        object.put("notFound", not_found);
+        object.put("total", String.valueOf(len));
+        object.put("found", String.valueOf(counter));
+        object.put("notFound", String.valueOf(not_founded));
         object.put("date", currentDate);
 
         JSONObject obj = new JSONObject();
-        obj.put("rfidNo", Submit_rfid);
+        obj.put("rfidNo", "B343342332w");
         obj.put("foundStatus", submit_foundStatus);
         array.put(obj);
-        object.put("inventoryList", obj.toString());
+        object.put("inventoryList", array.toString());
         RequestQueue queue = Volley.newRequestQueue(this);
 
 
-        final String requestBody = obj.toString();
+        final String requestBody = object.toString();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(Inventory_form.this, "Submitted....", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Inventory_form.this, response + "Submitted....", Toast.LENGTH_SHORT).show();
                 Log.i("VOLLEY Submit", response);
                 dialog.dismiss();
             }
@@ -265,6 +290,12 @@ public class Inventory_form extends AppCompatActivity {
                     return null;
                 }
             }
+
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                System.out.println("Response Code " + response.statusCode);
+                return super.parseNetworkResponse(response);
+            }
         };
 
         queue.add(stringRequest);
@@ -281,7 +312,7 @@ public class Inventory_form extends AppCompatActivity {
 
         System.out.println(counter + "Search DATA ");
 
-        int not_founded = len - counter;
+        not_founded = len - counter;
 
         total.setText(String.valueOf(len));
         found.setText(String.valueOf(counter));
@@ -298,13 +329,18 @@ public class Inventory_form extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    if (response.length() == 0) {
+                        Toast.makeText(Inventory_form.this, "No Data Available", Toast.LENGTH_SHORT).show();
+                    } else {
 
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        data_value.add(jsonArray.getString(i));
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            data_value.add(jsonArray.getString(i));
 
+                        }
+//
                     }
-//                    final List<String> List = new ArrayList<>(Arrays.asList(value));
+                    final List<String> List = new ArrayList<>(Arrays.asList(value));
 //
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -349,15 +385,19 @@ public class Inventory_form extends AppCompatActivity {
                     JSONArray array = new JSONArray(response);
 
                     len = array.length();
+                    total.setText(String.valueOf(len));
 
 
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = array.getJSONObject(i);
-                        String RFIDNo = object.getString("RFIDNo");
-                        String AccessNo = object.getString("AccessNo");
-                        String Author = object.getString("Author");
+                        String access_details = object.getString("AccessNo");
                         String Title = object.getString("Title");
-                        List_Inventory.add(new DataModel_Inventory(RFIDNo, AccessNo, Author, Title));
+                        String publisher = object.getString("Publisher");
+                        String Author = object.getString("Author");
+                        String subject = object.getString("SubjectTitle");
+                        String language = object.getString("Language");
+                        String edition = object.getString("Edition");
+                        List_Inventory.add(new DataModel_Inventory(Title, language, edition, publisher, access_details, Author, subject));
 
 
                     }
@@ -396,6 +436,19 @@ public class Inventory_form extends AppCompatActivity {
         };
 
         queue.add(stringRequest);
+    }
+
+    public void Clear() {
+        List_Inventory.clear();
+        adapter_list = new Adapter_Inventory(List_Inventory, getApplicationContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setAdapter(adapter_list);
+        Accession.setText("");
+        total.setText("");
+        not_found.setText("");
+        found.setText("");
+        data_value.clear();
+
     }
 
 }

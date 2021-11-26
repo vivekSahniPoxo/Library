@@ -11,7 +11,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="#3F9AC3"
+        android:background="#0000ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,7 +35,7 @@
             android:fontFamily="sans-serif"
             android:text="Identify"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="#333333"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,10 +49,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,23 +86,66 @@
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/custom_btn"
                 android:text="Search"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/Search_key"
                 app:layout_constraintTop_toBottomOf="@+id/button" />
 
-            <Button
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/custom_btn"
                 android:text="Tap TO Scan"
+
+                android:textColor="@color/white"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="10dp"
                 app:layout_constraintBottom_toTopOf="@+id/Search_key"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView33"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:paddingLeft="20dp"
+                        android:text="Tap to Scan Book"
+                        android:textColor="#6c7075"
+
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="55dp"
+                        android:layout_height="61dp"
+                        android:layout_marginStart="32dp"
+                        android:scaleType="fitXY"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/scanner_icon" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/Retry"
@@ -115,7 +158,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_btn"
                 android:text="Retry"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/New_accession"
                 app:layout_constraintStart_toStartOf="parent"
@@ -131,7 +174,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/custom_btn"
                 android:text="New"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/Retry"
@@ -140,7 +183,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView3"
                 android:layout_width="0dp"
-                android:layout_height="500dp"
+                android:layout_height="550dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
@@ -154,24 +197,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#E2F2FA">
+                    android:background="@color/white">
 
-
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:fontFamily="sans-serif"
-                        android:text="Book Details"
-                        android:textAlignment="center"
-                        android:textColor="#025495"
-                        android:textSize="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/textView12"
@@ -182,7 +209,7 @@
                         android:layout_marginEnd="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Book Title "
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Booktitle"
                         app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +224,7 @@
                         android:layout_marginEnd="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Author Name"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Authorname"
                         app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +238,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="RFID NO"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/RFID_NO"
                         app:layout_constraintStart_toStartOf="parent"
@@ -225,7 +252,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="EntryDate"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/EntryDate"
                         app:layout_constraintStart_toStartOf="parent"
@@ -239,7 +266,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Book Category"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/BookCategory"
                         app:layout_constraintStart_toStartOf="parent"
@@ -253,7 +280,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Language"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Language"
                         app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +294,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Publisher"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Publisher"
                         app:layout_constraintStart_toStartOf="parent"
@@ -281,7 +308,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Access No"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Access_No"
                         app:layout_constraintStart_toStartOf="parent"
@@ -295,7 +322,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Library ItemType"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Library_item"
                         app:layout_constraintStart_toStartOf="parent"
@@ -309,7 +336,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Item Status"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Item_status"
                         app:layout_constraintStart_toStartOf="parent"
@@ -323,7 +350,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Book AddedIn"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Book_Add"
                         app:layout_constraintStart_toStartOf="parent"
@@ -337,7 +364,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Edition"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Edition"
                         app:layout_constraintStart_toStartOf="parent"
@@ -351,7 +378,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="Subject Title"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/Subject_t"
                         app:layout_constraintStart_toStartOf="parent"
@@ -366,7 +393,7 @@
                         android:fontFamily="sans-serif"
                         android:text="YearOfPublication"
 
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/YearOfPublication"
                         app:layout_constraintStart_toStartOf="parent"
@@ -380,7 +407,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif"
                         android:text="TextView"
-                        android:textColor="#050000"
+                        android:textColor="@color/Text_color"
                         android:textStyle="bold"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
@@ -393,7 +420,7 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView12"
                         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -405,7 +432,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/textView16"
@@ -419,7 +446,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView17"
                         app:layout_constraintTop_toBottomOf="@+id/Authorname" />
@@ -432,7 +459,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView18"
                         app:layout_constraintTop_toBottomOf="@+id/RFID_NO" />
@@ -445,7 +472,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView19"
                         app:layout_constraintTop_toBottomOf="@+id/EntryDate" />
@@ -459,7 +486,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="--"
 
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView20"
                         app:layout_constraintTop_toBottomOf="@+id/BookCategory" />
@@ -472,7 +499,7 @@
                         android:layout_marginTop="9dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView21"
                         app:layout_constraintTop_toBottomOf="@+id/textView20" />
@@ -485,7 +512,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView22"
                         app:layout_constraintTop_toBottomOf="@+id/Publisher" />
@@ -498,7 +525,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView23"
                         app:layout_constraintTop_toBottomOf="@+id/Access_No" />
@@ -511,7 +538,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView24"
                         app:layout_constraintTop_toBottomOf="@+id/Library_item" />
@@ -524,7 +551,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView25"
                         app:layout_constraintTop_toBottomOf="@+id/Item_status" />
@@ -537,7 +564,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView26"
                         app:layout_constraintTop_toBottomOf="@+id/Book_Add" />
@@ -550,7 +577,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView27"
                         app:layout_constraintTop_toBottomOf="@+id/Edition" />
@@ -563,10 +590,20 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:text="--"
-                        android:textColor="#252525"
+                        android:textColor="@color/Text_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView29"
                         app:layout_constraintTop_toBottomOf="@+id/Subject_t" />
+
+                    <ImageView
+                        android:id="@+id/textView10"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/bookdetail_icon" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -575,10 +612,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

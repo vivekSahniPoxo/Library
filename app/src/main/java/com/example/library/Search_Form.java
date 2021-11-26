@@ -48,7 +48,7 @@ import javax.net.ssl.TrustManager;
 
 
 public class Search_Form extends AppCompatActivity {
-    Button add_accession, Search;
+    Button add_accession, Search, retry;
     EditText accession_no, search_data;
     RecyclerView recyclerView;
     List<Data_Model_Search> list_data = new ArrayList<>();
@@ -66,12 +66,21 @@ public class Search_Form extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_Accession);
         Search = findViewById(R.id.Search_b);
         search_data = findViewById(R.id.Search_Data);
+        retry = findViewById(R.id.Retry);
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Clear();
+            }
+        });
         dialog = new ProgressDialog(this);
+        search_data.clearFocus();
 
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Search_value = search_data.getText().toString();
+                search_data.setText("");
 //                filter(Search_value);
                 adapter_list.getFilter(Search_value);
             }
@@ -87,7 +96,7 @@ public class Search_Form extends AppCompatActivity {
                 try {
                     FetchData();
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -123,18 +132,22 @@ public class Search_Form extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
                             String access_details = response.getString("AccessNo");
                             String Title = response.getString("Title");
-                            String publisher=response.getString("Publisher");
-                            String rfid=response.getString("RFIDNo");
+                            String publisher = response.getString("Publisher");
+                            String Author = response.getString("Author");
+                            String subject = response.getString("SubjectTitle");
+                            String language = response.getString("Language");
+                            String edition = response.getString("Edition");
 
-                            list_data.add(new Data_Model_Search(publisher,rfid,access_details, Title));
-                             adapter_list = new Adapter_list(list_data, getApplicationContext());
+
+                            list_data.add(new Data_Model_Search(subject, language, edition, publisher, access_details, Author, Title));
+                            adapter_list = new Adapter_list(list_data, getApplicationContext());
                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             recyclerView.setAdapter(adapter_list);
-                           dialog.dismiss();
-                            Log.e("response", response.toString());
+                            dialog.dismiss();
+//                           System.out.println("Search Response "+response.toString());
+                            Log.e("response Search", response.toString());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -143,7 +156,6 @@ public class Search_Form extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        hideProgressDialog();
                         dialog.dismiss();
                         System.out.println("Negative Response" + error.getMessage());
                     }
@@ -154,29 +166,13 @@ public class Search_Form extends AppCompatActivity {
 
     }
 
-//    private void filter(String s) {
-//
-//        ArrayList<Data_Model_Search> filteredlist = new ArrayList<>();
-//
-//        // running a for loop to compare elements.
-//        for (Data_Model_Search item : list_data) {
-//            // checking if the entered string matched with any item of our recycler view.
-//            if (item.getAccessNo().toLowerCase().contains(s.toString().toLowerCase())) {
-//                // if the item is matched we are
-//                // adding it to our filtered list.
-//                filteredlist.add(item);
-//            }
-//        }
-//        if (filteredlist.isEmpty()) {
-//            // if no item is added in filtered list we are
-//            // displaying a toast message as no data found.
-//            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show();
-//        } else {
-//            // at last we are passing that filtered
-//            // list to our adapter class.
-//            adapter_list.filterList(filteredlist);
-//
-//        }
-//    }
+    public void Clear() {
+        list_data.clear();
+        adapter_list = new Adapter_list(list_data, getApplicationContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setAdapter(adapter_list);
+        search_data.setText("");
+        accession_no.setText("");
+    }
 
 }

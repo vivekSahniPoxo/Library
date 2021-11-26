@@ -22,7 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Identify_Form extends AppCompatActivity {
-    Button Search,NEW_data;
+    Button Search, NEW_data, Retry;
 
     EditText search_key;
     TextView LibraryItemType, BookAddedIn, BookCategory, ItemStatus, SubjectTitle, Language, Edition, Publisher, RFIDNo, AccessNo, Author, Title, YearOfPublication, EntryDate;
@@ -34,10 +34,11 @@ public class Identify_Form extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify_form);
-        search_key=findViewById(R.id.Search_key);
+        search_key = findViewById(R.id.Search_key);
+        Retry = findViewById(R.id.Retry);
         Search = findViewById(R.id.Search_rfid_button);
         LibraryItemType = findViewById(R.id.Library_item);
-        NEW_data=findViewById(R.id.New_accession);
+        NEW_data = findViewById(R.id.New_accession);
         BookAddedIn = findViewById(R.id.Book_Add);
         BookCategory = findViewById(R.id.BookCategory);
         ItemStatus = findViewById(R.id.Item_status);
@@ -53,6 +54,12 @@ public class Identify_Form extends AppCompatActivity {
         EntryDate = findViewById(R.id.EntryDate);
         dialog = new ProgressDialog(this);
 
+        Retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClearData();
+            }
+        });
 
         NEW_data.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +76,7 @@ public class Identify_Form extends AppCompatActivity {
                 try {
                     FetchData();
                     dialog.show();
-                    dialog.setMessage("Fetching...");
+                    dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -105,7 +112,7 @@ public class Identify_Form extends AppCompatActivity {
 
         JSONObject obj = new JSONObject();
 //
-        obj.put("AccessNo",search_key.getText().toString() );
+        obj.put("AccessNo", search_key.getText().toString());
 //        obj.put("RFIDNo", search_key.getText().toString());
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, url, obj,

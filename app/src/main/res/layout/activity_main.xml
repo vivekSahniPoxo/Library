@@ -36,7 +36,7 @@
            android:textStyle="bold"
            android:fontFamily="sans-serif"
            android:textAlignment="center"
-           android:textSize="20dp"
+           android:textSize="25dp"
            app:layout_constraintBottom_toBottomOf="parent"
            app:layout_constraintEnd_toStartOf="@+id/_Setting"
            app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/custom_btn">
+                    android:background="@drawable/custom_card">
 
 
                     <TextView
@@ -115,17 +115,17 @@
 
                     <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#88E8F4"
+
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView2"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/new_search" />
+                        android:src="@drawable/new_search_icon" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -150,7 +150,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/custom_btn">
+                    android:background="@drawable/custom_card">
 
 
                     <TextView
@@ -181,16 +181,16 @@
 
                     <ImageView
                         android:id="@+id/imageView1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="40dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#88E8F4"
                         android:src="@drawable/book_cell"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="#fe8302" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -216,7 +216,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/custom_btn">
+                    android:background="@drawable/custom_card">
 
 
                     <TextView
@@ -247,12 +247,11 @@
 
                     <ImageView
                         android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-
-                        android:background="#88E8F4"
-                        android:src="@drawable/new_inventory"
+                        android:src="@drawable/invertory"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -280,7 +279,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/custom_btn">
+                    android:background="@drawable/custom_card">
 
 
                     <TextView
@@ -315,13 +314,13 @@
 
                     <ImageView
                         android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#88E8F4"
-                        android:src="@drawable/tracking"
+
+                        android:src="@drawable/new_identify"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

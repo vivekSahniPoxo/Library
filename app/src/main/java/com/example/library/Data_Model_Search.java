@@ -17,19 +17,39 @@ public class Data_Model_Search {
     private String seriesNo;
     private String seriesTitle;
     private String color;
+    private String publisher;
+    private String rFIDNo;
+    private String accessNo;
+    private String author;
+    private String title;
+    private String volume;
+    private String yearOfPublication;
+    private String pages;
+    private String registrationDate;
 
+    private String size;
+
+    private String keywords;
+
+    private String userName;
+
+    private String employeeName;
+    private String entryDate;
 //    public Data_Model_Search(String publisher, String rFIDNo) {
 //        this.publisher = publisher;
 //        this.rFIDNo = rFIDNo;
 //    }
 
-
-    public Data_Model_Search(String publisher, String rFIDNo, String accessNo, String title) {
+    public Data_Model_Search(String subjectTitle, String language, String edition, String publisher, String accessNo, String author, String title) {
+        this.subjectTitle = subjectTitle;
+        this.language = language;
+        this.edition = edition;
         this.publisher = publisher;
-        this.rFIDNo = rFIDNo;
         this.accessNo = accessNo;
+        this.author = author;
         this.title = title;
     }
+
 
 //    public Data_Model_Search(String accessNo, String title) {
 //        this.accessNo = accessNo;
@@ -260,25 +280,7 @@ public class Data_Model_Search {
         this.entryDate = entryDate;
     }
 
-    private String publisher;
-    private String rFIDNo;
-    private String accessNo;
-    private String author;
-    private String title;
-    private String volume;
-    private String yearOfPublication;
-    private String pages;
-    private String registrationDate;
 
-    private String size;
-
-    private String keywords;
-
-    private String userName;
-
-    private String employeeName;
-
-    private String entryDate;
 
 
 }

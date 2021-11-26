@@ -7,6 +7,12 @@ public class DataModel_Racking {
     private String RFIDNo;
     private String EntryDate;
 
+    public DataModel_Racking(String rackNo, String shelfNo, String RFIDNo) {
+        RackNo = rackNo;
+        ShelfNo = shelfNo;
+        this.RFIDNo = RFIDNo;
+    }
+
     public DataModel_Racking(int id, String rackNo, String shelfNo, String RFIDNo, String entryDate) {
         this.id = id;
         RackNo = rackNo;
