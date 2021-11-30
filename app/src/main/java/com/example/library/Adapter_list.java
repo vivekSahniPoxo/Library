@@ -21,13 +21,12 @@ import java.util.List;
 
 public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder> {
     List<Data_Model_Search> list;
-    List<Data_Model_Search> listfilter;
     Context context;
 
     public Adapter_list(List<Data_Model_Search> list, Context context) {
         this.list = list;
         this.context = context;
-        listfilter = new ArrayList<>(list);
+
     }
 
 
@@ -41,8 +40,10 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
     @Override
     public void onBindViewHolder(@NonNull myviewholder holder, int position) {
-
+//Initial Data model
         Data_Model_Search model_search = list.get(position);
+
+        //Binding Data with components
         holder.Title.setText(model_search.getTitle());
         holder.publisher.setText(model_search.getPublisher());
         holder.Subject.setText(model_search.getSubjectTitle());
@@ -52,6 +53,9 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
         holder.access_No.setText(model_search.getAccessNo());
         holder.head_title.setText(model_search.getAccessNo());
         holder.head_subject.setText(model_search.getTitle());
+
+
+        //Listener
         holder.access_No.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +64,7 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             }
         });
 
-
+//Change color if data found
         if (model_search.getColor() == "Green") {
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
             holder.head_subject.setTextColor(Color.parseColor("#FFFFFF"));
@@ -74,13 +78,10 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 //                holder.cardView.setVisibility(View.GONE);
                 }
             });
-//            holder.Title_Details.setTextColor(Color.parseColor("#FFFFFF"));
-//            holder.Author_Details.setTextColor(Color.parseColor("#FFFFFF"));
-//            holder.RFid_details.setTextColor(Color.parseColor("#FFFFFF"));
-//            holder.Access_detail.setTextColor(Color.parseColor("#FFFFFF"));
-
         } else {
             holder.cardView.setCardBackgroundColor(Color.WHITE);
+            holder.head_subject.setTextColor(Color.parseColor("#000000"));
+            holder.head_title.setTextColor(Color.parseColor("#000000"));
 
         }
 
@@ -99,6 +100,7 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
         public myviewholder(@NonNull View itemView) {
             super(itemView);
+            //Binding components
             Subject = itemView.findViewById(R.id.Subject);
             Title = itemView.findViewById(R.id.Booktitle);
             list_layout = itemView.findViewById(R.id.list_layout);
@@ -116,6 +118,21 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
     }
 
 
+    public void removeItem(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Data_Model_Search item, int position) {
+        list.add(position, item);
+        notifyItemInserted(position);
+    }
+
+    public List<Data_Model_Search> getData() {
+        return list;
+    }
+
+    //Method for Search
     public void getFilter(String search_value) {
         String charString = search_value;
         if (!charString.isEmpty()) {
@@ -123,12 +140,15 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             for (Data_Model_Search row : list) {
 
 
-                if (row.getAccessNo().matches(charString)) {
+                if(row.getAccessNo().matches(charString)) {
 
                     row.setColor("Green");
                     notifyDataSetChanged();
+                    break;
+                } else {
+                    Toast.makeText(context.getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
+                    break;
                 }
-
             }
         } else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();

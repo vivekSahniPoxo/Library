@@ -22,6 +22,7 @@
 
         <ImageView
             android:id="@+id/imageView4"
+            android:visibility="gone"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
@@ -35,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:fontFamily="sans-serif"
             android:text="Inventory"
             android:textAlignment="center"
@@ -194,12 +196,16 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/section_A">
-
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:id="@+id/coordinator"
+    android:layout_height="match_parent">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:background="@color/white" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
             </androidx.cardview.widget.CardView>
 
 

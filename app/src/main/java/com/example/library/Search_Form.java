@@ -1,10 +1,15 @@
 package com.example.library;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.net.SSLCertificateSocketFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +30,7 @@ import com.android.volley.toolbox.BaseHttpStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.json.JSONException;
@@ -48,80 +54,84 @@ import javax.net.ssl.TrustManager;
 
 
 public class Search_Form extends AppCompatActivity {
-    Button add_accession, Search, retry;
+    Button add_accession_btn, Search_btn, retry_btn;
     EditText accession_no, search_data;
     RecyclerView recyclerView;
-    List<Data_Model_Search> list_data = new ArrayList<>();
+    List<Data_Model_Search> list_data_Recyclerview = new ArrayList<>();
     Adapter_list adapter_list;
     ProgressDialog dialog;
-
-
-//    NukeSSLCerts certs;
+    CoordinatorLayout coordinate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_form);
+
+        //Binding Components
+        coordinate = findViewById(R.id.coordinator);
         recyclerView = findViewById(R.id.recyclerView_Accession);
-        Search = findViewById(R.id.Search_b);
+        Search_btn = findViewById(R.id.Search_b);
         search_data = findViewById(R.id.Search_Data);
-        retry = findViewById(R.id.Retry);
-        retry.setOnClickListener(new View.OnClickListener() {
+        retry_btn = findViewById(R.id.Retry);
+        add_accession_btn = findViewById(R.id.Add_accession);
+        accession_no = findViewById(R.id.Accession_no);
+
+        //Initialize of Progress Dialog
+        dialog = new ProgressDialog(this);
+
+        //Method for Swipe to Delete
+        enableSwipeToDeleteAndUndo();
+
+        //Listeners
+        retry_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Clear();
             }
         });
-        dialog = new ProgressDialog(this);
-        search_data.clearFocus();
 
-        Search.setOnClickListener(new View.OnClickListener() {
+        Search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Search_value = search_data.getText().toString();
-                search_data.setText("");
-//                filter(Search_value);
-                adapter_list.getFilter(Search_value);
-            }
+                if (search_data.length() > 0) {
 
+                    String Search_value = search_data.getText().toString();
+                    search_data.setText("");
+//                filter(Search_value);
+                    adapter_list.getFilter(Search_value);
+                } else {
+                    search_data.setError("Enter Input...");
+                }
+            }
         });
 
-
-        add_accession = findViewById(R.id.Add_accession);
-        accession_no = findViewById(R.id.Accession_no);
-        add_accession.setOnClickListener(new View.OnClickListener() {
+        add_accession_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    FetchData();
-                    dialog.show();
-                    dialog.setMessage(getString(R.string.Dialog_Text));
-                    dialog.setCancelable(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (accession_no.length() > 0) {
+
+                    try {
+                        FetchData();
+                        dialog.show();
+                        dialog.setMessage(getString(R.string.Dialog_Text));
+                        dialog.setCancelable(false);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    accession_no.setError("Enter Input...");
                 }
-
-//                list_data.add(new DataModel(accession));
-//                Adapter_list adapter_list = new Adapter_list(list_data, getApplicationContext());
-//                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-//                recyclerView.setAdapter(adapter_list);
                 accession_no.setText("");
-//                list_data = new ArrayList<>();
-//                adapter_list = new Adapter_list(list_data,getApplicationContext());
-//                recyclerView.setAdapter(adapter_list);
-
             }
         });
 
 
     }
 
-
+    //Method for Search Data From Server using Accession Number
     private void FetchData() throws JSONException {
-
         String url = "https://library.poxorfid.com/api/BooksInfo/FetchBookByAccessNo";
-
         JSONObject obj = new JSONObject();
 //
 //        obj.put("AccessNo", "B1228");
@@ -141,8 +151,8 @@ public class Search_Form extends AppCompatActivity {
                             String edition = response.getString("Edition");
 
 
-                            list_data.add(new Data_Model_Search(subject, language, edition, publisher, access_details, Author, Title));
-                            adapter_list = new Adapter_list(list_data, getApplicationContext());
+                            list_data_Recyclerview.add(new Data_Model_Search(subject, language, edition, publisher, access_details, Author, Title));
+                            adapter_list = new Adapter_list(list_data_Recyclerview, getApplicationContext());
                             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                             recyclerView.setAdapter(adapter_list);
                             dialog.dismiss();
@@ -166,9 +176,43 @@ public class Search_Form extends AppCompatActivity {
 
     }
 
+    private void enableSwipeToDeleteAndUndo() {
+
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final Data_Model_Search item = adapter_list.getData().get(position);
+                adapter_list.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinate, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter_list.restoreItem(item, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+                });
+//
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+    }
+
+    //Method for Clear Data from Components
     public void Clear() {
-        list_data.clear();
-        adapter_list = new Adapter_list(list_data, getApplicationContext());
+        list_data_Recyclerview.clear();
+        adapter_list = new Adapter_list(list_data_Recyclerview, getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter_list);
         search_data.setText("");

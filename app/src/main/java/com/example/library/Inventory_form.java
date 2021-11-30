@@ -1,11 +1,16 @@
 package com.example.library;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +32,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,11 +47,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class Inventory_form extends AppCompatActivity {
-    Spinner Select_Inventory;
-    Spinner Inventory_Details;
+    Spinner Select_Inventory, Inventory_Details;
     String[] value = new String[]{"Choose", "Title", "Author", "Department", "Racks"};
     List<String> data_value;
-    String inventory_details_option, Select_option;
+    String inventory_details_option, Select_option, Submit_rfid;
     ProgressDialog dialog;
     Button search_book, Search, Submit, NewBtn, Back_Btn;
     List<DataModel_Inventory> List_Inventory;
@@ -54,10 +59,9 @@ public class Inventory_form extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText Accession;
     DataModel_Inventory dataModel_inventory;
-    String Submit_rfid;
     boolean submit_foundStatus;
-    int counter = 0;
-    int len, not_founded;
+    int counter = 0, len, not_founded;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +80,14 @@ public class Inventory_form extends AppCompatActivity {
         Search = findViewById(R.id.Search_);
         Accession = findViewById(R.id.Search_Data);
         NewBtn = findViewById(R.id.New_Button);
+        coordinatorLayout = findViewById(R.id.coordinator);
         Back_Btn = findViewById(R.id.Back_Button);
         dataModel_inventory = new DataModel_Inventory();
         Submit = findViewById(R.id.Submit_Button);
+
+        //Method for Left Swipe to Delete
+        enableSwipeToDeleteAndUndo();
+
 
         NewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,19 +118,21 @@ public class Inventory_form extends AppCompatActivity {
         });
 
 
-//        founded = dataModel_inventory.getColor();
-//        Toast.makeText(Inventory_form.this, founded, Toast.LENGTH_SHORT).show();
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Search_value = Accession.getText().toString();
-                adapter_list.getFilter(Search_value);
-//                found.setText(String.valueOf(countResult));count();
-                Accession.setText("");
-                count();
-            }
-        });
+                if (Accession.length() > 0) {
+                    String Search_value = Accession.getText().toString();
+                    adapter_list.getFilter(Search_value);
 
+                    Accession.setText("");
+                    count();
+                } else {
+                    Accession.setError("Enter input please....");
+                }
+            }
+
+        });
 
         search_book.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +150,11 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
+//     Enable DetailSpinner
         Inventory_Details.setEnabled(false);
-        //Initialize Arrayo
+
+
+        //Initialize Array
         data_value = new ArrayList<String>();
         data_value.add("Choose");
 
@@ -150,12 +164,6 @@ public class Inventory_form extends AppCompatActivity {
         spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         Select_Inventory.setAdapter(spinnerArrayAdapter);
 
-//             Select_Inventory.setOnClickListener(new View.OnClickListener() {
-//                 @Override
-//                 public void onClick(View v) {
-//                     List_Inventory.clear();
-//                 }
-//             });
         // Implemented onSelected Listener on Spinner
         Select_Inventory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -222,12 +230,14 @@ public class Inventory_form extends AppCompatActivity {
             }
         });
 
+        //Set The Value
         found.setText("0");
         not_found.setText("0");
         total.setText(String.valueOf(len));
 
     }
 
+    //Submit Report to Server Method
     private void submit_Report() throws JSONException {
 
         if (dataModel_inventory.getColor() == "Green") {
@@ -301,9 +311,8 @@ public class Inventory_form extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-
+    //Method for Count Number of Search
     public void count() {
-
         while (dataModel_inventory.getColor() == "Green") {
 
             System.out.println(counter + "Search DATA ");
@@ -311,15 +320,14 @@ public class Inventory_form extends AppCompatActivity {
         counter++;
 
         System.out.println(counter + "Search DATA ");
-
         not_founded = len - counter;
-
         total.setText(String.valueOf(len));
         found.setText(String.valueOf(counter));
         not_found.setText(String.valueOf(not_founded));
 
     }
 
+    //Method Fetch Data for DetailsSpinner
     public void SelectByTitle(String url) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -328,18 +336,16 @@ public class Inventory_form extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+
                 try {
-                    if (response.length() == 0) {
-                        Toast.makeText(Inventory_form.this, "No Data Available", Toast.LENGTH_SHORT).show();
-                    } else {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        data_value.add(jsonArray.getString(i));
 
-                        JSONArray jsonArray = new JSONArray(response);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            data_value.add(jsonArray.getString(i));
-
-                        }
-//
                     }
+//
+
                     final List<String> List = new ArrayList<>(Arrays.asList(value));
 //
                 } catch (JSONException e) {
@@ -348,6 +354,7 @@ public class Inventory_form extends AppCompatActivity {
                 List_Inventory = new ArrayList<>();
                 dialog.dismiss();
                 Inventory_Details.setEnabled(true);
+
 //                System.out.println("Array Value " + data_value);
 //
             }
@@ -364,7 +371,7 @@ public class Inventory_form extends AppCompatActivity {
 
     }
 
-
+    //Method for Fetch Books Details
     private void FetchData(String inventory_details_option, String select_option) throws JSONException {
 
         String url = "https://library.poxorfid.com/api/Inventory/InventoryRecords";
@@ -381,6 +388,7 @@ public class Inventory_form extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 try {
                     JSONArray array = new JSONArray(response);
 
@@ -438,6 +446,7 @@ public class Inventory_form extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    //Method for Clear Data from components
     public void Clear() {
         List_Inventory.clear();
         adapter_list = new Adapter_Inventory(List_Inventory, getApplicationContext());
@@ -448,7 +457,43 @@ public class Inventory_form extends AppCompatActivity {
         not_found.setText("");
         found.setText("");
         data_value.clear();
+        final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
+        spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        Inventory_Details.setAdapter(spinnerArrayAdapter1);
 
+    }
+
+    //Method For Left swipe for Delete
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final DataModel_Inventory item = adapter_list.getData().get(position);
+                adapter_list.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter_list.restoreItem(item, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+                });
+//
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
 }

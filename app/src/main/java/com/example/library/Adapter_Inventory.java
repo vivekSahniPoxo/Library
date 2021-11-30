@@ -33,7 +33,10 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
+      //Initialize model
         DataModel_Inventory dataModel_inventory = list.get(position);
+
+        //binding data with  components
         holder.Title.setText(dataModel_inventory.getTitle());
         holder.publisher.setText(dataModel_inventory.getPublisher());
         holder.Subject.setText(dataModel_inventory.getSubjectTitle());
@@ -43,6 +46,8 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         holder.access_No.setText(dataModel_inventory.getAccessNo());
         holder.head_title.setText(dataModel_inventory.getSubjectTitle());
         holder.head_subject.setText(dataModel_inventory.getAccessNo());
+
+        //listener
         holder.access_No.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +56,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
             }
         });
 
-
+//       Change color if Search Found
         if (dataModel_inventory.getColor() == "Green") {
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
             holder.head_subject.setTextColor(Color.parseColor("#FFFFFF"));
@@ -72,6 +77,9 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 
         } else {
             holder.cardView.setCardBackgroundColor(Color.WHITE);
+            holder.head_subject.setTextColor(Color.parseColor("#000000"));
+            holder.head_title.setTextColor(Color.parseColor("#000000"));
+
 
         }
     }
@@ -106,6 +114,21 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         }
     }
 
+    public void removeItem(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(DataModel_Inventory item, int position) {
+        list.add(position, item);
+        notifyItemInserted(position);
+    }
+
+    public List<DataModel_Inventory> getData() {
+        return list;
+    }
+
+//   method for search data
     public int getFilter(String search_value) {
         String charString = search_value;
         int bookFooundCount = 0;
@@ -116,7 +139,13 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
                     row.setColor("Green");
                     bookFooundCount = bookFooundCount + 1;
                     notifyDataSetChanged();
+                    break;
                 }
+                else {
+                    Toast.makeText(c.getApplicationContext(), "Data not Found...", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
 
             }
         } else {

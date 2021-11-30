@@ -18,18 +18,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-CardView search,inventory,tracking,identify;
+CardView search_Form,inventory_Form,tracking_Form,identify_Form;
 ImageView Setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        search =findViewById(R.id.search_tab);
-        tracking=findViewById(R.id.Tracking_tab);
+
+        //Binding of Components
+        search_Form =findViewById(R.id.search_tab);
+        tracking_Form=findViewById(R.id.Tracking_tab);
+        inventory_Form=findViewById(R.id.Inventory_Tab);
+        identify_Form=findViewById(R.id.Identify_tab);
         Setting=findViewById(R.id._Setting);
 
+        //Method for Internet Connection Check
         isNetworkConnectionAvailable();
 
+        //Listeners
         Setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,30 +44,28 @@ ImageView Setting;
             }
         });
 
-        tracking.setOnClickListener(new View.OnClickListener() {
+        tracking_Form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, com.example.library.Tracking_form.class));
 
             }
         });
-        inventory=findViewById(R.id.Inventory_Tab);
-        inventory.setOnClickListener(new View.OnClickListener() {
+        inventory_Form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Inventory_form.class));
 
             }
         });
-        identify=findViewById(R.id.Identify_tab);
-        identify.setOnClickListener(new View.OnClickListener() {
+        identify_Form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Identify_Form.class));
 
             }
         });
-        search.setOnClickListener(new View.OnClickListener() {
+        search_Form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Search_Form.class));
@@ -71,6 +75,7 @@ ImageView Setting;
     }
     @Override
     public void onBackPressed() {
+        //Dialog Box for Exit User
         new AlertDialog.Builder(this)
                 .setIcon(R.drawable.exit_icon)
                 .setTitle("Quit")

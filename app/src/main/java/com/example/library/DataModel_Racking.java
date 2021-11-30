@@ -2,62 +2,42 @@ package com.example.library;
 
 public class DataModel_Racking {
     int id;
-    private String RackNo;
-    private String ShelfNo;
-    private String RFIDNo;
-    private String EntryDate;
+    private String Rfid;
+    private String publisher;
+    private String title;
+//    private String EntryDate;
 
-    public DataModel_Racking(String rackNo, String shelfNo, String RFIDNo) {
-        RackNo = rackNo;
-        ShelfNo = shelfNo;
-        this.RFIDNo = RFIDNo;
+
+    public DataModel_Racking(String rfid, String publisher, String title) {
+        Rfid = rfid;
+        this.publisher = publisher;
+        this.title = title;
     }
 
-    public DataModel_Racking(int id, String rackNo, String shelfNo, String RFIDNo, String entryDate) {
-        this.id = id;
-        RackNo = rackNo;
-        ShelfNo = shelfNo;
-        this.RFIDNo = RFIDNo;
-        EntryDate = entryDate;
+    public DataModel_Racking() {
     }
 
-    public int getId() {
-        return id;
+    public String getRfid() {
+        return Rfid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRfid(String rfid) {
+        Rfid = rfid;
     }
 
-    public String getRackNo() {
-        return RackNo;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setRackNo(String rackNo) {
-        RackNo = rackNo;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
-    public String getShelfNo() {
-        return ShelfNo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setShelfNo(String shelfNo) {
-        ShelfNo = shelfNo;
-    }
-
-    public String getRFIDNo() {
-        return RFIDNo;
-    }
-
-    public void setRFIDNo(String RFIDNo) {
-        this.RFIDNo = RFIDNo;
-    }
-
-    public String getEntryDate() {
-        return EntryDate;
-    }
-
-    public void setEntryDate(String entryDate) {
-        EntryDate = entryDate;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -31,16 +31,32 @@ public class Adapter_Racking extends RecyclerView.Adapter<Adapter_Racking.myView
 
     @Override
     public void onBindViewHolder(@NonNull myViewholder holder, int position) {
+        //Initialize Model Class
         DataModel_Racking dataModel_racking = list.get(position);
-        holder.rack_no.setText(dataModel_racking.getRackNo());
-        holder.shelve_no.setText(dataModel_racking.getShelfNo());
-        holder.rfid_no.setText(dataModel_racking.getRFIDNo());
+        //Data Binding
+        holder.rack_no.setText(dataModel_racking.getRfid());
+        holder.shelve_no.setText(dataModel_racking.getPublisher());
+        holder.rfid_no.setText(dataModel_racking.getTitle());
 
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void removeItem(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(DataModel_Racking item, int position) {
+        list.add(position, item);
+        notifyItemInserted(position);
+    }
+
+    public List<DataModel_Racking> getData() {
+        return list;
     }
 
     public class myViewholder extends RecyclerView.ViewHolder {
@@ -51,15 +67,9 @@ public class Adapter_Racking extends RecyclerView.Adapter<Adapter_Racking.myView
             rack_no = itemView.findViewById(R.id.rack_number);
             shelve_no = itemView.findViewById(R.id.shelve_Number);
             rfid_no = itemView.findViewById(R.id.RFId_number);
-//            cardView = itemView.findViewById(R.id.cardView);
-//            card_details=itemView.findViewById(R.id.cardView_Details);
-//            Language=itemView.findViewById(R.id.Language);
-//            Access_detail=itemView.findViewById(R.id.Booktitle);
-//            RFid_details=itemView.findViewById(R.id.RFID_NO);
-//            Author_Details=itemView.findViewById(R.id.Authorname);
-//            Title_Details=itemView.findViewById(R.id.EntryDate);
 
 
         }
     }
+
 }

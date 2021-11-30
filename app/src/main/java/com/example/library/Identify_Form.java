@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,10 +24,8 @@ import org.json.JSONObject;
 
 public class Identify_Form extends AppCompatActivity {
     Button Search, NEW_data, Retry;
-
     EditText search_key;
     TextView LibraryItemType, BookAddedIn, BookCategory, ItemStatus, SubjectTitle, Language, Edition, Publisher, RFIDNo, AccessNo, Author, Title, YearOfPublication, EntryDate;
-    //   ProgressDialog dialog = new ProgressDialog(this);
     ProgressDialog dialog;
 
 
@@ -34,6 +33,8 @@ public class Identify_Form extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify_form);
+
+        //Binding Components
         search_key = findViewById(R.id.Search_key);
         Retry = findViewById(R.id.Retry);
         Search = findViewById(R.id.Search_rfid_button);
@@ -52,8 +53,11 @@ public class Identify_Form extends AppCompatActivity {
         Title = findViewById(R.id.Booktitle);
         YearOfPublication = findViewById(R.id.YearOfPublication);
         EntryDate = findViewById(R.id.EntryDate);
+
+        //Initialize of Dialog Box
         dialog = new ProgressDialog(this);
 
+        //Listeners
         Retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,24 +71,26 @@ public class Identify_Form extends AppCompatActivity {
                 ClearData();
             }
         });
-
-
-        search_key = findViewById(R.id.Search_key);
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    FetchData();
-                    dialog.show();
-                    dialog.setMessage(getString(R.string.Dialog_Text));
-                    dialog.setCancelable(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (search_key.length() > 0) {
+                    try {
+                        FetchData();
+                        dialog.show();
+                        dialog.setMessage(getString(R.string.Dialog_Text));
+                        dialog.setCancelable(false);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    search_key.setError("Please Enter Input....");
                 }
             }
         });
     }
 
+    //Method For Clear Components
     private void ClearData() {
 
         LibraryItemType.setText("");
@@ -106,9 +112,9 @@ public class Identify_Form extends AppCompatActivity {
 
     }
 
+    //Method For Fetching Data from Server
     private void FetchData() throws JSONException {
-
-        String url = " https://library.poxorfid.com/api/BooksInfo/FetchBookByRFIDNo";
+        String url = "https://library.poxorfid.com/api/BooksInfo/FetchBookByRFIDNo";
 
         JSONObject obj = new JSONObject();
 //
@@ -119,6 +125,7 @@ public class Identify_Form extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         try {
 
                             String LibraryItemType1 = response.getString("LibraryItemType");
