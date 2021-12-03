@@ -1,6 +1,7 @@
 package com.example.library;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.util.List;
 public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.MyViewholder> {
     List<DataModel_Inventory> list;
     Context c;
+    SharedPreferences pref;
 
     public Adapter_Inventory(List<DataModel_Inventory> list, Context c) {
         this.list = list;
@@ -33,7 +35,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
-      //Initialize model
+        //Initialize model
         DataModel_Inventory dataModel_inventory = list.get(position);
 
         //binding data with  components
@@ -128,23 +130,30 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         return list;
     }
 
-//   method for search data
+    //   method for search data
     public int getFilter(String search_value) {
+        pref = c.getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
         String charString = search_value;
         int bookFooundCount = 0;
+        SharedPreferences.Editor editor = pref.edit();
         if (!charString.isEmpty()) {
 
             for (DataModel_Inventory row : list) {
                 if (row.getAccessNo().matches(charString) || row.getTitle().matches(charString)) {
                     row.setColor("Green");
+//                    String accession=row.getAccessNo();
+//                    Toast.makeText(c.getApplicationContext(), "accession"+row.getrFIDNo(), Toast.LENGTH_SHORT).show();
+                    editor.putString("RFID NO", row.getrFIDNo());
+                    editor.putString("Status","True");
+                    editor.commit();
                     bookFooundCount = bookFooundCount + 1;
                     notifyDataSetChanged();
-                    break;
+//                    break;
                 }
-                else {
-                    Toast.makeText(c.getApplicationContext(), "Data not Found...", Toast.LENGTH_SHORT).show();
-                    break;
-                }
+//                else {
+//                    Toast.makeText(c.getApplicationContext(), "Data not Found...", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
 
 
             }

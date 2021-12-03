@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,9 +44,12 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class Inventory_form extends AppCompatActivity {
     Spinner Select_Inventory, Inventory_Details;
@@ -62,6 +67,8 @@ public class Inventory_form extends AppCompatActivity {
     boolean submit_foundStatus;
     int counter = 0, len, not_founded;
     CoordinatorLayout coordinatorLayout;
+    SharedPreferences sh;
+    List<DataModel_Inventory_InventoryStatus> ListStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,9 @@ public class Inventory_form extends AppCompatActivity {
 
         //Method for Left Swipe to Delete
         enableSwipeToDeleteAndUndo();
+
+
+        sh = getSharedPreferences("pref", 0);
 
 
         NewBtn.setOnClickListener(new View.OnClickListener() {
@@ -123,10 +133,15 @@ public class Inventory_form extends AppCompatActivity {
             public void onClick(View v) {
                 if (Accession.length() > 0) {
                     String Search_value = Accession.getText().toString();
-                    adapter_list.getFilter(Search_value);
-
+                    int fnd = adapter_list.getFilter(Search_value);
+                    counter = counter + fnd;
+//                    Toast.makeText(Inventory_form.this, "Counted "+counter, Toast.LENGTH_SHORT).show();
                     Accession.setText("");
-                    count();
+                    not_founded = len - counter;
+                    total.setText(String.valueOf(len));
+                    found.setText(String.valueOf(counter));
+                    not_found.setText(String.valueOf(not_founded));
+//                    count();
                 } else {
                     Accession.setError("Enter input please....");
                 }
@@ -156,6 +171,7 @@ public class Inventory_form extends AppCompatActivity {
 
         //Initialize Array
         data_value = new ArrayList<String>();
+        ListStatus = new ArrayList<>();
         data_value.add("Choose");
 
         //Set up Local Data with Adapter
@@ -211,9 +227,7 @@ public class Inventory_form extends AppCompatActivity {
         });
 
         // Set up Detail Spinner
-        final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
-        spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        Inventory_Details.setAdapter(spinnerArrayAdapter1);
+
 
         Inventory_Details.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -240,19 +254,15 @@ public class Inventory_form extends AppCompatActivity {
     //Submit Report to Server Method
     private void submit_Report() throws JSONException {
 
-        if (dataModel_inventory.getColor() == "Green") {
-            Submit_rfid = dataModel_inventory.getrFIDNo();
-            submit_foundStatus = true;
-        } else {
-            submit_foundStatus = false;
-            Submit_rfid = dataModel_inventory.getrFIDNo();
-
-        }
+        //Getting Shared Data
+        String rfid = sh.getString("RFID NO", null);
+        String status = sh.getString("Status", null);
+        ListStatus.add(new DataModel_Inventory_InventoryStatus(rfid, status));
 
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
         String url = " https://library.poxorfid.com/api/Inventory/SubmitInventoyRecord";
-        JSONArray array = new JSONArray();
+
         JSONObject object = new JSONObject();
         object.put("inventoryID", "");
         object.put("inventoryBasedOn", Select_option);
@@ -261,14 +271,19 @@ public class Inventory_form extends AppCompatActivity {
         object.put("found", String.valueOf(counter));
         object.put("notFound", String.valueOf(not_founded));
         object.put("date", currentDate);
-
+        JSONArray array = new JSONArray();
         JSONObject obj = new JSONObject();
-        obj.put("rfidNo", "B343342332w");
-        obj.put("foundStatus", submit_foundStatus);
-        array.put(obj);
-        object.put("inventoryList", array.toString());
-        RequestQueue queue = Volley.newRequestQueue(this);
 
+        for (int i = 0;i<ListStatus.size(); i++) {
+            obj.put("rfidNo", ListStatus.get(i).getRFIDNUMBER());
+            obj.put("foundStatus", ListStatus.get(i).getStatus());
+            array.put(obj);
+        }
+
+        object.put("inventoryList", "" + array);
+//
+        RequestQueue queue = Volley.newRequestQueue(this);
+        System.out.println("JSON DATA " + object);
 
         final String requestBody = object.toString();
 
@@ -282,7 +297,8 @@ public class Inventory_form extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("VOLLEY Negative", error.toString());
+                Log.e("VOLLEY Negative", error.toString() + "Submitted Response : " + error.networkResponse.data + "UTF-8");
+                System.out.println("Error Submitting" + error.getCause());
                 dialog.dismiss();
             }
         }) {
@@ -312,20 +328,20 @@ public class Inventory_form extends AppCompatActivity {
     }
 
     //Method for Count Number of Search
-    public void count() {
-        while (dataModel_inventory.getColor() == "Green") {
-
-            System.out.println(counter + "Search DATA ");
-        }
-        counter++;
-
-        System.out.println(counter + "Search DATA ");
-        not_founded = len - counter;
-        total.setText(String.valueOf(len));
-        found.setText(String.valueOf(counter));
-        not_found.setText(String.valueOf(not_founded));
-
-    }
+//    public void count() {
+//        while (dataModel_inventory.getColor() == "Green") {
+//
+//            System.out.println(counter + "Search DATA ");
+//        }
+//        counter++;
+//
+//        System.out.println(counter + "Search DATA ");
+//        not_founded = len - counter;
+//        total.setText(String.valueOf(len));
+//        found.setText(String.valueOf(counter));
+//        not_found.setText(String.valueOf(not_founded));
+//
+//    }
 
     //Method Fetch Data for DetailsSpinner
     public void SelectByTitle(String url) {
@@ -340,13 +356,15 @@ public class Inventory_form extends AppCompatActivity {
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         data_value.add(jsonArray.getString(i));
 
                     }
 //
-
-                    final List<String> List = new ArrayList<>(Arrays.asList(value));
+//                    System.out.println("Sorted List "+data_value);
+                    RearrangeItems(data_value);
+//                    final List<String> List = new ArrayList<>(Arrays.asList(value));
 //
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -405,10 +423,12 @@ public class Inventory_form extends AppCompatActivity {
                         String subject = object.getString("SubjectTitle");
                         String language = object.getString("Language");
                         String edition = object.getString("Edition");
-                        List_Inventory.add(new DataModel_Inventory(Title, language, edition, publisher, access_details, Author, subject));
+                        String RFIDNO = object.getString("RFIDNo");
+                        List_Inventory.add(new DataModel_Inventory(Title, language, edition, publisher, access_details, Author, subject, RFIDNO));
 
 
                     }
+
                     adapter_list = new Adapter_Inventory(List_Inventory, getApplicationContext());
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     recyclerView.setAdapter(adapter_list);
@@ -449,6 +469,7 @@ public class Inventory_form extends AppCompatActivity {
     //Method for Clear Data from components
     public void Clear() {
         List_Inventory.clear();
+
         adapter_list = new Adapter_Inventory(List_Inventory, getApplicationContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter_list);
@@ -457,6 +478,7 @@ public class Inventory_form extends AppCompatActivity {
         not_found.setText("");
         found.setText("");
         data_value.clear();
+        data_value.add("Choose");
         final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, data_value);
         spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         Inventory_Details.setAdapter(spinnerArrayAdapter1);
@@ -496,4 +518,18 @@ public class Inventory_form extends AppCompatActivity {
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
 
+    private void RearrangeItems(List<String> data_value) {
+        Collections.sort(this.data_value, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
+        final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, this.data_value);
+        spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        Inventory_Details.setAdapter(spinnerArrayAdapter1);
+
+//        Adapter adapter = new Adapter(List_Inventory, Inventory_form.this);
+//        recyclerView.setAdapter(adapter);
+    }
 }

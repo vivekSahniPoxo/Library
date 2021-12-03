@@ -36,7 +36,7 @@ public class DataModel_Inventory {
     private String seriesTitle;
     private String color;
 
-    public DataModel_Inventory(String subjectTitle, String language, String edition, String publisher, String accessNo, String author, String title) {
+    public DataModel_Inventory(String subjectTitle, String language, String edition, String publisher, String accessNo, String author, String title,String rFIDNo) {
         this.subjectTitle = subjectTitle;
         this.language = language;
         this.edition = edition;
@@ -44,6 +44,7 @@ public class DataModel_Inventory {
         this.accessNo = accessNo;
         this.author = author;
         this.title = title;
+        this.rFIDNo=rFIDNo;
     }
 
 

@@ -140,15 +140,16 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             for (Data_Model_Search row : list) {
 
 
-                if(row.getAccessNo().matches(charString)) {
+                if (row.getAccessNo().matches(charString)) {
 
                     row.setColor("Green");
                     notifyDataSetChanged();
-                    break;
-                } else {
-                    Toast.makeText(context.getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
-                    break;
+//                    break;
                 }
+//                else {
+//                    Toast.makeText(context.getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }
             }
         } else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
