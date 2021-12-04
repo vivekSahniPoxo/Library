@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         android:usesCleartextTraffic="true">
+<!--        android:sharedUserId="android.uid.system-->
         <activity
             android:name=".Setting_"
             android:exported="false" />

@@ -53,7 +53,7 @@ import java.util.Random;
 
 public class Inventory_form extends AppCompatActivity {
     Spinner Select_Inventory, Inventory_Details;
-    String[] value = new String[]{"Choose", "Title", "Author", "Department", "Racks"};
+    String[] value = new String[]{"Choose", "Titles", "Author", "Department", "Racks"};
     List<String> data_value;
     String inventory_details_option, Select_option, Submit_rfid;
     ProgressDialog dialog;
@@ -210,8 +210,9 @@ public class Inventory_form extends AppCompatActivity {
                     dialog.setCancelable(false);
 
                 } else if (position == 4) {
-                    String url = "https://library.poxorfid.com/api/Inventory/FetchShelves";
-                    SelectByTitle(url);
+                    String url = "https://library.poxorfid.com/api/Inventory/FetchRacks";
+//                    SelectByTitle(url);
+                    FetchRacks(url);
                     dialog.show();
                     dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
@@ -251,6 +252,49 @@ public class Inventory_form extends AppCompatActivity {
 
     }
 
+    private void FetchRacks(String url) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+                    JSONObject jsonArray = new JSONObject(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        i = i + 1;
+                        data_value.add(jsonArray.getString(String.valueOf(i)));
+                        i = i - 1;
+                    }
+//
+//                    System.out.println("Sorted List "+data_value);
+                    RearrangeItems(data_value);
+//                    final List<String> List = new ArrayList<>(Arrays.asList(value));
+//
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                List_Inventory = new ArrayList<>();
+                dialog.dismiss();
+                Inventory_Details.setEnabled(true);
+
+//                System.out.println("Array Value " + data_value);
+//
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Inventory_form.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        queue.add(request);
+
+    }
+
     //Submit Report to Server Method
     private void submit_Report() throws JSONException {
 
@@ -271,16 +315,28 @@ public class Inventory_form extends AppCompatActivity {
         object.put("found", String.valueOf(counter));
         object.put("notFound", String.valueOf(not_founded));
         object.put("date", currentDate);
+        //JSONArray array = new JSONArray();
         JSONArray array = new JSONArray();
-        JSONObject obj = new JSONObject();
+        for (int i = 0; i < ListStatus.size(); i++) {
+            JSONObject obj = new JSONObject();
 
-        for (int i = 0;i<ListStatus.size(); i++) {
-            obj.put("rfidNo", ListStatus.get(i).getRFIDNUMBER());
-            obj.put("foundStatus", ListStatus.get(i).getStatus());
-            array.put(obj);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("rfidNo", ListStatus.get(i).getRFIDNUMBER());
+            jsonObject.put("foundStatus", ListStatus.get(i).getStatus());
+
+
+            array.put(jsonObject);
         }
 
-        object.put("inventoryList", "" + array);
+//        object.put("inventoryList", "" + array);*/
+//        JSONObject jsonObject  = new JSONObject();
+//        jsonObject.put("rfidNo","B11");
+//        jsonObject.put("foundStatus","B12");
+//
+//        JSONArray  array = new JSONArray();
+//        array.put(jsonObject);
+
+        object.put("inventoryList", array);
 //
         RequestQueue queue = Volley.newRequestQueue(this);
         System.out.println("JSON DATA " + object);
@@ -348,7 +404,6 @@ public class Inventory_form extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -356,7 +411,6 @@ public class Inventory_form extends AppCompatActivity {
 
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-
                     for (int i = 0; i < jsonArray.length(); i++) {
                         data_value.add(jsonArray.getString(i));
 
@@ -532,4 +586,6 @@ public class Inventory_form extends AppCompatActivity {
 //        Adapter adapter = new Adapter(List_Inventory, Inventory_form.this);
 //        recyclerView.setAdapter(adapter);
     }
+    //Fetching Racks Function
+
 }
