@@ -301,6 +301,7 @@ public class Inventory_form extends AppCompatActivity {
         //Getting Shared Data
         String rfid = sh.getString("RFID NO", null);
         String status = sh.getString("Status", null);
+
         ListStatus.add(new DataModel_Inventory_InventoryStatus(rfid, status));
 
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());

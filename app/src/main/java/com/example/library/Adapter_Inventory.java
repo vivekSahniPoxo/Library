@@ -50,11 +50,13 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         holder.head_subject.setText(dataModel_inventory.getAccessNo());
 
         //listener
-        holder.access_No.setOnClickListener(new View.OnClickListener() {
+        holder.minimize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.card_details.setVisibility(View.GONE);
                 holder.cardView.setVisibility(View.VISIBLE);
+                holder.minimize.setVisibility(View.GONE);
+                holder.expand.setVisibility(View.VISIBLE);
             }
         });
 
@@ -63,10 +65,12 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
             holder.head_subject.setTextColor(Color.parseColor("#FFFFFF"));
             holder.head_title.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.head_title.setOnClickListener(new View.OnClickListener() {
+            holder.expand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     holder.card_details.setVisibility(View.VISIBLE);
+                    holder.expand.setVisibility(View.GONE);
+                    holder.minimize.setVisibility(View.VISIBLE);
 
 
 //                holder.cardView.setVisibility(View.GONE);
@@ -93,7 +97,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 
     public class MyViewholder extends RecyclerView.ViewHolder {
 
-        TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title;
+        TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title,expand,minimize;
         LinearLayout list_layout;
         CardView cardView, card_details;
 
@@ -101,6 +105,8 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
             super(itemView);
             Subject = itemView.findViewById(R.id.Subject);
             Title = itemView.findViewById(R.id.Booktitle);
+            expand=itemView.findViewById(R.id.expand);
+            minimize=itemView.findViewById(R.id.minimize);
             list_layout = itemView.findViewById(R.id.list_layout);
             cardView = itemView.findViewById(R.id.cardView);
             card_details = itemView.findViewById(R.id.cardView_Details);
@@ -144,7 +150,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 //                    String accession=row.getAccessNo();
 //                    Toast.makeText(c.getApplicationContext(), "accession"+row.getrFIDNo(), Toast.LENGTH_SHORT).show();
                     editor.putString("RFID NO", row.getrFIDNo());
-                    editor.putString("Status","True");
+                    editor.putString("Status", "True");
                     editor.commit();
                     bookFooundCount = bookFooundCount + 1;
                     notifyDataSetChanged();

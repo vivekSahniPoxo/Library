@@ -56,11 +56,13 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
 
         //Listener
-        holder.access_No.setOnClickListener(new View.OnClickListener() {
+        holder.minimize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.card_details.setVisibility(View.GONE);
                 holder.cardView.setVisibility(View.VISIBLE);
+                holder.minimize.setVisibility(View.GONE);
+                holder.expand.setVisibility(View.VISIBLE);
             }
         });
 
@@ -69,10 +71,12 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             holder.cardView.setCardBackgroundColor(Color.rgb(46, 139, 87));
             holder.head_subject.setTextColor(Color.parseColor("#FFFFFF"));
             holder.head_title.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.head_title.setOnClickListener(new View.OnClickListener() {
+            holder.expand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     holder.card_details.setVisibility(View.VISIBLE);
+                    holder.expand.setVisibility(View.GONE);
+                    holder.minimize.setVisibility(View.VISIBLE);
 
 
 //                holder.cardView.setVisibility(View.GONE);
@@ -94,7 +98,7 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
 
 
     public class myviewholder extends RecyclerView.ViewHolder {
-        TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title;
+        TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title,expand,minimize;
         LinearLayout list_layout;
         CardView cardView, card_details;
 
@@ -102,6 +106,8 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
             super(itemView);
             //Binding components
             Subject = itemView.findViewById(R.id.Subject);
+            expand=itemView.findViewById(R.id.expand);
+            minimize=itemView.findViewById(R.id.minimize);
             Title = itemView.findViewById(R.id.Booktitle);
             list_layout = itemView.findViewById(R.id.list_layout);
             cardView = itemView.findViewById(R.id.cardView);
