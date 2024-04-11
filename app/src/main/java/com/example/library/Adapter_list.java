@@ -1,7 +1,12 @@
 package com.example.library;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder> {
     List<Data_Model_Search> list;
@@ -53,6 +63,7 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
         holder.access_No.setText(model_search.getAccessNo());
         holder.head_title.setText(model_search.getAccessNo());
         holder.head_subject.setText(model_search.getTitle());
+       // Log.d("rfidAdapter",model_search.getrFIDNo());
 
 
         //Listener
@@ -139,26 +150,70 @@ public class Adapter_list extends RecyclerView.Adapter<Adapter_list.myviewholder
     }
 
     //Method for Search
-    public void getFilter(String search_value) {
-        String charString = search_value;
-        if (!charString.isEmpty()) {
-
-            for (Data_Model_Search row : list) {
-
-
-                if (row.getAccessNo().matches(charString)) {
-
-                    row.setColor("Green");
-                    notifyDataSetChanged();
-//                    break;
-                }
-//                else {
-//                    Toast.makeText(context.getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
+//    @SuppressLint("NotifyDataSetChanged")
+//    public void getFilter(String search_value) {
+//        String charString = search_value;
+//        if (!charString.isEmpty()) {
+//
+//            for (Data_Model_Search row : list) {
+//
+//                if (row.getrFIDNo().matches(search_value)) {
+////                if (row.getAccessNo().matches(charString)) {
+//                    row.setColor("Green");
+//                    notifyDataSetChanged();
 //                    break;
 //                }
-            }
+//                else {
+//                    //Toast.makeText(context.getApplicationContext(), "Data Not Found", Toast.LENGTH_SHORT).show();
+//                   // break;
+//                }
+//            }
+//        } else {
+//            Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+
+    private Handler handler = new Handler(Looper.getMainLooper());
+
+    public void getFilter(final String search_value) {
+        final String charString = search_value;
+        if (!charString.isEmpty()) {
+            // Offload the data processing to a background thread
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Data_Model_Search> matchingItems = new ArrayList<>();
+                    for (Data_Model_Search row : list) {
+                        if (row.getrFIDNo().matches(charString)) {
+                            matchingItems.add(row);
+                        }
+                    }
+                    // Update the UI with matching items on the main UI thread
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateColors(matchingItems);
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+            }).start();
         } else {
             Toast.makeText(context.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void updateColors(List<Data_Model_Search> matchingItems) {
+        for (Data_Model_Search row : matchingItems) {
+            row.setColor("Green");
+        }
+    }
+
+
+
+
+
+
+
 }

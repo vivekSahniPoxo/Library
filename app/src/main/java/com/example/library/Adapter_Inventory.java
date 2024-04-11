@@ -3,6 +3,9 @@ package com.example.library;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.MyViewholder> {
     List<DataModel_Inventory> list;
     Context c;
     SharedPreferences pref;
+
+
+
+
+
 
     public Adapter_Inventory(List<DataModel_Inventory> list, Context c) {
         this.list = list;
@@ -88,6 +99,12 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
 
 
         }
+
+
+
+
+
+
     }
 
     @Override
@@ -100,6 +117,7 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
         TextView Subject, Title, publisher, author, edition, language, access_No, head_subject, head_title,expand,minimize;
         LinearLayout list_layout;
         CardView cardView, card_details;
+
 
         public MyViewholder(@NonNull View itemView) {
             super(itemView);
@@ -117,6 +135,9 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
             access_No = itemView.findViewById(R.id.Access_No);
             head_subject = itemView.findViewById(R.id.Head_subject);
             head_title = itemView.findViewById(R.id.Head_Tilte);
+
+
+
 
 
         }
@@ -137,35 +158,152 @@ public class Adapter_Inventory extends RecyclerView.Adapter<Adapter_Inventory.My
     }
 
     //   method for search data
-    public int getFilter(String search_value) {
-        pref = c.getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        String charString = search_value;
-        int bookFooundCount = 0;
-        SharedPreferences.Editor editor = pref.edit();
-        if (!charString.isEmpty()) {
-
-            for (DataModel_Inventory row : list) {
-                if (row.getAccessNo().matches(charString) || row.getTitle().matches(charString)) {
-                    row.setColor("Green");
-//                    String accession=row.getAccessNo();
-//                    Toast.makeText(c.getApplicationContext(), "accession"+row.getrFIDNo(), Toast.LENGTH_SHORT).show();
-                    editor.putString("RFID NO", row.getrFIDNo());
-                    editor.putString("Status", "True");
-                    editor.commit();
-                    bookFooundCount = bookFooundCount + 1;
-                    notifyDataSetChanged();
-//                    break;
-                }
+//    public int getFilter(String search_value) {
+//        pref = c.getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+//        String charString = search_value;
+//        int bookFooundCount = 0;
+//        String rfidNo;
+//        HashSet<String> matchedRfidNo = new HashSet<>();
+//        SharedPreferences.Editor editor = pref.edit();
+//        if (!charString.isEmpty()) {
+//
+//            for (DataModel_Inventory row : list) {
+//               //if (!pref.getString("RFID NO",null).equals(row.getrFIDNo())) {
+//
+//                try {
+//                    if ( row.getrFIDNo().matches(charString)) {
+////                    if ( row.getrFIDNo().matches(charString) || row.getTitle().matches(charString)) {
+//                       // if (!matchedRfidNo.contains(search_value)) {
+//                           // matchedRfidNo.add(search_value);
+//                            Log.d("SearchValie",search_value);
+//                            row.setColor("Green");
+//
+//
+//
+////                    String accession=row.getAccessNo();
+////                    Toast.makeText(c.getApplicationContext(), "accession"+row.getrFIDNo(), Toast.LENGTH_SHORT).show();
+//                            editor.putString("RFID NO", row.getrFIDNo());
+//                            editor.putString("Status", "True");
+//                            editor.commit();
+//                        bookFooundCount = bookFooundCount + 1;
+//                        notifyDataSetChanged();
+////                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+////                                List<String> matchedRfidNoDistinctList = matchedRfidNo.stream().distinct().collect(Collectors.toList());
+////                                bookFooundCount = matchedRfidNo.size();
+////                                notifyDataSetChanged();
+////
+////                            }
+//
+//                        //}
+//                    }
+//
+////                    break;
+//              //  }
 //                else {
-//                    Toast.makeText(c.getApplicationContext(), "Data not Found...", Toast.LENGTH_SHORT).show();
-//                    break;
+//                    editor.putString("RFID NO", row.getrFIDNo());
+//                    editor.putString("Status", "False");
+//
+//
 //                }
+//                } catch (Exception e){
+//                    Log.d("nullPointer",e.toString());
+//                }
+//            }
+//        } else {
+//            Toast.makeText(c.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
+//        }
+//        return bookFooundCount;
+//    }
 
 
-            }
+
+
+
+
+
+
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Object countLock = new Object();
+    final Set<String> uniqueRfidTags = new HashSet<>();
+     int bookFoundCount = 0;
+
+    public int getFilter(final String search_value) {
+        final String charString = search_value;
+
+        pref = c.getApplicationContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+//        final Set<String> uniqueRfidTags = new HashSet<>(); // Store unique RFID tags
+
+        if (!charString.isEmpty()) {
+            // Offload the data processing to a background thread
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<DataModel_Inventory> matchingItems = new ArrayList<>();
+                    SharedPreferences.Editor editor;
+
+                    synchronized (pref) { // Synchronize SharedPreferences access
+                        editor = pref.edit();
+                        for (DataModel_Inventory row : list) {
+                            if (row.getrFIDNo().matches(charString)) {
+                                String rfidTag = row.getrFIDNo();
+                                if (!uniqueRfidTags.contains(rfidTag)) {
+                                    uniqueRfidTags.add(rfidTag); // Add to unique RFID tags set
+                                    matchingItems.add(row);
+                                    editor.putString("RFID NO", rfidTag);
+                                    editor.putString("Status", "True");
+                                }
+                            } else {
+                                editor.putString("RFID NO", row.getrFIDNo());
+                                editor.putString("Status", "False");
+                            }
+                        }
+                    }
+                    editor.apply(); // Apply changes after processing all items
+
+                    // Debug log to check the size of matchingItems
+                    Log.d("MatchingItems", "Size: " + matchingItems.size());
+
+                    // Update the UI with matching items on the main UI thread
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateColors(matchingItems);
+
+                            // Synchronize access to bookFoundCount
+                            synchronized (countLock) {
+                               // bookFoundCount = uniqueRfidTags.size();
+                                Log.d("nskvhkvijibvijb", String.valueOf(uniqueRfidTags.size()));
+                                notifyDataSetChanged();
+                            }
+
+                            // Debug log to check if notifyDataSetChanged() is called
+                            Log.d("UI Update", "NotifiedDataSetChanged");
+                        }
+                    });
+
+                   // Log.d("unirfd", "Total Matching Items: " + uniqueRfidTags.size());
+                }
+            }).start();
         } else {
             Toast.makeText(c.getApplicationContext(), "Please Enter Keyword...", Toast.LENGTH_SHORT).show();
         }
-        return bookFooundCount;
+
+        synchronized (countLock) {
+            return bookFoundCount; // Return the count of unique RFID tags found
+        }
     }
+
+
+
+
+    private void updateColors(List<DataModel_Inventory> matchingItems) {
+        for (DataModel_Inventory row : matchingItems) {
+            row.setColor("Green");
+            bookFoundCount = uniqueRfidTags.size();
+            Log.d("unirfd", String.valueOf(uniqueRfidTags.size()));
+        }
+    }
+
+
 }

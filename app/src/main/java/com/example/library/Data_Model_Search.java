@@ -35,12 +35,12 @@ public class Data_Model_Search {
 
     private String employeeName;
     private String entryDate;
-//    public Data_Model_Search(String publisher, String rFIDNo) {
-//        this.publisher = publisher;
-//        this.rFIDNo = rFIDNo;
-//    }
+    public Data_Model_Search(String publisher, String rFIDNo) {
+        this.publisher = publisher;
+        this.rFIDNo = rFIDNo;
+    }
 
-    public Data_Model_Search(String subjectTitle, String language, String edition, String publisher, String accessNo, String author, String title) {
+    public Data_Model_Search(String subjectTitle, String language, String edition, String publisher, String accessNo, String author, String title , String rFIDNo) {
         this.subjectTitle = subjectTitle;
         this.language = language;
         this.edition = edition;
@@ -48,6 +48,7 @@ public class Data_Model_Search {
         this.accessNo = accessNo;
         this.author = author;
         this.title = title;
+        this.rFIDNo = rFIDNo;
     }
 
 

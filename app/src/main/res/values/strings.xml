@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Library</string>
     <string name="Dialog_Text">Please Wait...</string>
+    <string name="start">Start</string>
+    <string name="submit">Submit</string>
+    <string name="write_fail">Write Failed</string>
+    <string name="read_fail">Read Failed</string>
 
 </resources>

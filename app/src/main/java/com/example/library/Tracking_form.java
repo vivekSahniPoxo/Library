@@ -8,14 +8,21 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,6 +40,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
+import com.speedata.libuhf.IUHFService;
+import com.speedata.libuhf.UHFManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,23 +50,35 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Tracking_form extends AppCompatActivity {
     Spinner spinner_shelve_no, rack_number_Spinner;
     String[] value = new String[]{"Title", "Author", "Branch", "Selected Rack"};
-    EditText rfid_number;
+    EditText rfid_number,etShelveNo,etRackNo;
     Button Add_Racking, Submit_racking, Submit_Restart;
     List<String> rack_no, list_shelve;
-    String rack_Number_Selected, shelve_number_selected, shelve;
+    String rack_Number_Selected, shelve_number_selected, shelve,rackNo;
     ProgressDialog dialog;
     List<DataModel_Racking> Item_Add_Item;
+    List<DataModel_Racking> Item_Add_Temp;
     RecyclerView recyclerView;
     Adapter_Racking adapter_racking;
     CoordinatorLayout constraintLayout;
     List<List_Data_Model> data_models;
     DataModel_Racking dataModel_racking;
+    IUHFService iuhfService;
+    String RfidNo;
+    private ToneGenerator toneGenerator;
+    List<String> rfidList;
 
+
+    AutoCompleteTextView autocomplete,autoCompleteRacks;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,16 +92,39 @@ public class Tracking_form extends AppCompatActivity {
         Submit_racking = findViewById(R.id.Submit_racking);
         recyclerView = findViewById(R.id.tracking_recyclerview);
         Submit_Restart = findViewById(R.id.Restart_racking);
+        etShelveNo = findViewById(R.id.et_shelvNo);
+        autoCompleteRacks = findViewById(R.id.autoCompleteTextViewRacks);
+
+        etRackNo = findViewById(R.id.et_rack_no);
 
 //    Initialize of List and Model Class object
         Item_Add_Item = new ArrayList<>();
         data_models = new ArrayList<>();
+        rfidList = new ArrayList<>();
         dataModel_racking = new DataModel_Racking();
         list_shelve = new ArrayList<>();
 
 
 //     Disable Spinner
         spinner_shelve_no.setEnabled(false);
+
+//        iuhfService = UHFManager.getUHFService(this);
+//        iuhfService.openDev();
+//        iuhfService.inventoryStart();
+
+//        try {
+//
+//            autoCompleteRacks = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewRacks);
+//
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(Tracking_form.this, android.R.layout.select_dialog_item, rack_no);
+//
+//            autocomplete.setThreshold(2);
+//            autocomplete.setAdapter(adapter);
+//        } catch (Exception e){
+//
+//        }
+
+
 
 
         //Listener on Add button
@@ -114,10 +158,14 @@ public class Tracking_form extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Update_shelve();
-                    dialog.show();
-                    dialog.setMessage(getString(R.string.Dialog_Text));
-                    dialog.setCancelable(false);
+                    if (etRackNo.getText().toString().equals("") && etShelveNo.getText().toString().equals("")){
+                        Toast.makeText(Tracking_form.this,"Rack No & Shelve No should not be empty",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Update_shelve();
+                        dialog.show();
+                        dialog.setMessage(getString(R.string.Dialog_Text));
+                        dialog.setCancelable(false);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -130,8 +178,9 @@ public class Tracking_form extends AppCompatActivity {
 
 
         //Method for Spinner value from Api
-        FetchRack_NO();
-        list_shelve.add("Choose");
+        //FetchRack_NO();
+        dialog.dismiss();
+       // list_shelve.add("Choose");
 
         //Initialize List
         rack_no = new ArrayList<>();
@@ -143,6 +192,7 @@ public class Tracking_form extends AppCompatActivity {
         spinnerArrayAdapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         rack_number_Spinner.setAdapter(spinnerArrayAdapter1);
         rack_number_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 rack_Number_Selected = parent.getItemAtPosition(position).toString();
@@ -151,6 +201,14 @@ public class Tracking_form extends AppCompatActivity {
                     dialog.setMessage(getString(R.string.Dialog_Text));
                     dialog.setCancelable(false);
                     FetchShelve_No(rack_Number_Selected);
+
+                    autocomplete = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView1);
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(Tracking_form.this,android.R.layout.select_dialog_item, list_shelve);
+
+                    autocomplete.setThreshold(2);
+                    autocomplete.setAdapter(adapter);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -168,6 +226,7 @@ public class Tracking_form extends AppCompatActivity {
             public void onClick(View v) {
                 Clear();
             }
+
         });
 
         //Set up Spinner For Showing Shelve Number
@@ -192,24 +251,46 @@ public class Tracking_form extends AppCompatActivity {
 
     //Method for Racks Number
     private void FetchRack_NO() {
-        String url = "https://library.poxorfid.com/api/Inventory/FetchRacks";
+       // String url = "https://library.poxorfid.com/api/Inventory/FetchRacks";
+        //String url =    "http://164.52.223.163:4558/api/Inventory/FetchRacks";
+        String url = "http://192.168.0.113:83/api/Inventory/FetchRacks";
+       // String url = "http://192.168.100.5:81/api/Inventory/FetchRacks";
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                dialog.dismiss();
+                rack_no.clear();
+                rack_no.add("Choose");
+                spinner_shelve_no.setEnabled(true);
+
 
                 try {
-                    dialog.dismiss();
-                    JSONObject object = new JSONObject(response);
 
-                    String one = object.getString("1");
-                    String two = object.getString("2");
-                    String three = object.getString("3");
+                    JSONArray array = new JSONArray(response);
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                           // Log.d("rackNo", (String) array.get(i));
+                        String id = object.getString("Id");
+                        String rackNo = object.getString("RackNo");
+                        //rackNo = (String) array.get(i);
+                       // Log.d("rackNo", (String) array.get(Integer.parseInt("Id")));
+                              //rack_no.add(id);
+                            rack_no.add(rackNo);
 
-                    rack_no.add(one);
-                    rack_no.add(two);
-                    rack_no.add(three);
-                    System.out.println(one + "Value for spinner");
+                        }
+
+//                    dialog.dismiss();
+//                    JSONObject object = new JSONObject(response);
+//
+//                    String one = object.getString("1");
+//                    String two = object.getString("2");
+//                    String three = object.getString("3");
+//
+//                    rack_no.add(one);
+//                    rack_no.add(two);
+//                    rack_no.add(three);
+//                    System.out.println(one + "Value for spinner");
 
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
@@ -221,7 +302,7 @@ public class Tracking_form extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Tracking_form.this, error.getMessage(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(Tracking_form.this, error.getMessage(), Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -233,7 +314,10 @@ public class Tracking_form extends AppCompatActivity {
 
     //Method for Fetch Shelve Number
     private void FetchShelve_No(String rack_Number_Selected) throws JSONException {
-        String url = "https://library.poxorfid.com/api/Inventory/FetchShelves";
+        String url = "http://192.168.0.113:83/api/Inventory/FetchShelves";
+       // String url = "http://192.168.100.5:81/api/Inventory/FetchShelves";
+       // String url = "https://library.poxorfid.com/api/Inventory/FetchShelves";
+        //String url = "http://164.52.223.163:4558/api/Inventory/FetchShelves";
         JSONObject object = new JSONObject();
         object.put("RackNo", rack_Number_Selected);
         final String requestBody = object.toString();
@@ -242,7 +326,7 @@ public class Tracking_form extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 list_shelve.clear();
-                list_shelve.add("Choose");
+                //list_shelve.add("Choose");
                 spinner_shelve_no.setEnabled(true);
                 try {
                     JSONArray array = new JSONArray(response);
@@ -288,17 +372,21 @@ public class Tracking_form extends AppCompatActivity {
 
     //Method for Submit the Report to Server
     private void Update_shelve() throws JSONException {
-
-        String url = "https://library.poxorfid.com/api/Inventory/UpdateBookLocation";
+       //String url = "http://192.168.100.5:81/api/Inventory/UpdateBookLocation";
+        String url = "http://192.168.0.113:83/api/Inventory/UpdateBookLocation";
+        //String url = "https://library.poxorfid.com/api/Inventory/UpdateBookLocation";
+        //String url = "http://164.52.223.163:4558/api/Inventory/UpdateBookLocation";
         JSONArray array = new JSONArray();
         JSONObject obj = new JSONObject();
-//
-//        obj.put("RFIDNo", rfid_number.getText().toString());
+
+//       obj.put("RFIDNo", rfid_number.getText().toString());
         for (int i = 0; i < data_models.size(); i++) {
             obj.put("RFIDNo", data_models.get(i).getRfidNumber());
-            obj.put("RackNo", data_models.get(i).getRackNumber());
-            obj.put("ShelfNo", data_models.get(i).getShelveNumber());
+//            obj.put("RackNo", data_models.get(i).getRackNumber());
+           // obj.put("ShelfNo", data_models.get(i).getShelveNumber());
         }
+        obj.put("RackNo", etRackNo.getText());
+        obj.put("ShelfNo", etShelveNo.getText());
         array.put(obj);
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -311,6 +399,9 @@ public class Tracking_form extends AppCompatActivity {
                 Toast.makeText(Tracking_form.this, "Data Updated Successfully....", Toast.LENGTH_SHORT).show();
 
                 Log.i("VOLLEY", response);
+//                Item_Add_Item.clear();
+//                Item_Add_Temp.clear();
+                Clear();
                 dialog.dismiss();
             }
         }, new Response.ErrorListener() {
@@ -348,8 +439,9 @@ public class Tracking_form extends AppCompatActivity {
     //Method for Fetch data Books data by Accession Number
     private void FetchData() throws JSONException {
 
-        String url = "https://library.poxorfid.com/api/BooksInfo/FetchBookByAccessNo";
-
+      //  String url = "https://library.poxorfid.com/api/BooksInfo/FetchBookByAccessNo";
+        String url = "http://192.168.0.113:83/api/BooksInfo/FetchBookByAccessNo";
+        //String url = "http://192.168.100.5:81/api/BooksInfo/FetchBookByAccessNo";
         JSONObject obj = new JSONObject();
 //
 //        obj.put("AccessNo", "B1228");
@@ -403,16 +495,21 @@ public class Tracking_form extends AppCompatActivity {
 
     //Method for Clearing Data
     public void Clear() {
-        Item_Add_Item.clear();
-        adapter_racking = new Adapter_Racking(Item_Add_Item, getApplicationContext());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(adapter_racking);
-        rfid_number.setText("");
-        list_shelve.clear();
-        spinner_shelve_no.setEnabled(false);
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, list_shelve);
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinner_shelve_no.setAdapter(spinnerArrayAdapter);
+        try {
+            Item_Add_Item.clear();
+            Item_Add_Temp.clear();
+            adapter_racking = new Adapter_Racking(Item_Add_Item, getApplicationContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerView.setAdapter(adapter_racking);
+            rfid_number.setText("");
+            list_shelve.clear();
+            spinner_shelve_no.setEnabled(false);
+            final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, list_shelve);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            spinner_shelve_no.setAdapter(spinnerArrayAdapter);
+        } catch (Exception e){
+
+        }
 
 
     }
@@ -430,8 +527,7 @@ public class Tracking_form extends AppCompatActivity {
                 adapter_racking.removeItem(position);
 
 
-                Snackbar snackbar = Snackbar
-                        .make(constraintLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(constraintLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -450,5 +546,132 @@ public class Tracking_form extends AppCompatActivity {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(recyclerView);
     }
+
+
+
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//
+//
+//
+//            //data_models.add(new List_Data_Model(RfidNo, shelve_number_selected, rack_Number_Selected));
+//
+//            int selectedItemOfMySpinner = rack_number_Spinner.getSelectedItemPosition();
+//            String actualPositionOfMySpinner = (String) rack_number_Spinner.getItemAtPosition(selectedItemOfMySpinner);
+//
+//
+//            if (rack_number_Spinner.getSelectedItem().toString().trim().equals("Choose") ) {
+//                Toast.makeText(this, "Please select rack no", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//                if (spinner_shelve_no.getSelectedItem().toString().trim().equals("Choose")) {
+//                    Toast.makeText(this, "Please select  shelve no", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    iuhfService = UHFManager.getUHFService(this);
+//                    iuhfService.openDev();
+//                    iuhfService.inventoryStart();
+//                    RfidNo = iuhfService.read_area(1, "2", "6", "00000000").toString();
+//                    Item_Add_Item.add(new DataModel_Racking(RfidNo, shelve_number_selected, rack_Number_Selected));
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        dataModel_racking = new DataModel_Racking(RfidNo, shelve_number_selected, rack_Number_Selected);
+//                        Item_Add_Temp = Item_Add_Item.stream().distinct().collect(Collectors.toList());
+//                        adapter_racking = new Adapter_Racking(Item_Add_Temp, getApplicationContext());
+//                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//                        recyclerView.setAdapter(adapter_racking);
+//                        data_models.add(new List_Data_Model(dataModel_racking.getRfid(), shelve_number_selected, rack_Number_Selected));
+//                    }
+//                }
+//            }
+//
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Tracking_form.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_F1) {
+            try {
+                toneGenerator = new ToneGenerator(AudioManager.STREAM_ALARM, ToneGenerator.MAX_VOLUME);
+                toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP, 100);
+                VibrationUtil.vibratePhone(this);
+            } catch (Exception e){
+                Log.d("exception",e.toString());
+
+            }
+
+            try {
+               // if (rack_number_Spinner.getSelectedItem().toString().trim().equals("Choose")) {
+                    //Toast.makeText(this, "Please select rack no", Toast.LENGTH_SHORT).show();
+                   // globalSnackbar("Please select rack no");
+
+//                } else {
+//
+//                    if (spinner_shelve_no.getSelectedItem().toString().trim().equals("Choose")) {
+//                        //Toast.makeText(this, "Please select  shelve no", Toast.LENGTH_SHORT).show();
+//                        globalSnackbar("Please select  shelve no");
+
+                    //}
+               // else {
+                        iuhfService = UHFManager.getUHFService(this);
+                        iuhfService.openDev();
+                        iuhfService.setAntennaPower(30);
+                        //iuhfService.inventoryStart();
+                        if (!rfidList.contains(RfidNo)) {
+                            rfidList.add(RfidNo);
+                            RfidNo = iuhfService.read_area(1, "2", "6", "00000000").toString();
+                            // Item_Add_Item.add(new DataModel_Racking(RfidNo, shelve_number_selected, rack_Number_Selected));
+                            // Item_Add_Item.add(new DataModel_Racking(RfidNo, shelve_number_selected, rack_Number_Selected));
+                            Item_Add_Item.add(new DataModel_Racking(RfidNo, etShelveNo.getText().toString(), etRackNo.getText().toString()));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                dataModel_racking = new DataModel_Racking(RfidNo, shelve_number_selected, rack_Number_Selected);
+                                Item_Add_Temp = Item_Add_Item.stream().distinct().collect(Collectors.toList());
+                                adapter_racking = new Adapter_Racking(Item_Add_Temp, getApplicationContext());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                recyclerView.setAdapter(adapter_racking);
+                                data_models.add(new List_Data_Model(dataModel_racking.getRfid(), shelve_number_selected, rack_Number_Selected));
+                            }
+
+                            //}
+                        }
+
+            } catch (Exception e){
+
+            }
+
+            return true;
+        } else {
+            if (keyCode == KeyEvent.KEYCODE_BACK){
+                startActivity(new Intent(Tracking_form.this, MainActivity.class));
+                finish();
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+
+    public void globalSnackbar(String text) {
+        View rootView = findViewById(android.R.id.content);
+        if (rootView != null) {
+            Snackbar.make(rootView, text, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

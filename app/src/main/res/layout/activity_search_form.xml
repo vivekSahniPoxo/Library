@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".Search_Form">
+
+    <TextView
+        android:id="@+id/tvRfid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/btnTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:text="@string/start"
+        android:layout_marginTop="12dp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_btn"
+        android:layout_marginStart="18dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="100dp"
+        android:layout_height="32dp"
+        android:text="0"
+        android:layout_marginTop="12dp"
+        android:textAllCaps="false"
+        android:textColor="#00FFFFFF"
+        android:layout_marginStart="18dp"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginEnd="18dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
@@ -38,15 +78,31 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="sans-serif-medium"
-
             android:text="Search"
             android:textAlignment="center"
             android:textColor="#333333"
             android:textSize="25dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/blinkingDot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="•"
+            android:background="@drawable/ic_green_dot"
+            android:layout_marginEnd="18dp"
+            android:layout_gravity="end|center"
+            android:textSize="38sp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textColor="@color/green2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/textView34"
+            app:layout_constraintTop_toTopOf="@+id/textView34"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
@@ -85,12 +141,11 @@
                         android:layout_height="40dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-
+                        android:visibility="gone"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/custom_edittext"
                         android:hint="Search"
-
                         android:inputType="text"
                         android:paddingLeft="10dp"
                         android:textColor="@color/black"
@@ -109,6 +164,7 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/custom_btn"
                         android:text="Search"
+                        android:visibility="gone"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toTopOf="@+id/Add_accession"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +177,6 @@
                         android:id="@+id/Accession_no"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
@@ -129,7 +184,6 @@
                         android:background="@drawable/custom_edittext"
                         android:ems="10"
                         android:hint="Enter Accession No"
-
                         android:inputType="textPersonName"
                         android:paddingLeft="10dp"
                         android:textColor="@color/black"

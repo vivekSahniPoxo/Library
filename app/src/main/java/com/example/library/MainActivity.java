@@ -9,16 +9,15 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
+
+import com.example.library.utils.all_scann_books.ui.AllScannBooks;
 
 public class MainActivity extends AppCompatActivity {
-CardView search_Form,inventory_Form,tracking_Form,identify_Form;
+CardView search_Form,inventory_Form,tracking_Form,identify_Form,allBookScannTab;
 ImageView Setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,7 @@ ImageView Setting;
         inventory_Form=findViewById(R.id.Inventory_Tab);
         identify_Form=findViewById(R.id.Identify_tab);
         Setting=findViewById(R.id._Setting);
+        allBookScannTab = findViewById(R.id.all_scanned_tab);
 
         //Method for Internet Connection Check
         isNetworkConnectionAvailable();
@@ -61,7 +61,7 @@ ImageView Setting;
         identify_Form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,Identify_Form.class));
+                startActivity(new Intent(MainActivity.this, Identify_Form.class));
 
             }
         });
@@ -69,6 +69,13 @@ ImageView Setting;
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Search_Form.class));
+            }
+        });
+
+        allBookScannTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AllScannBooks.class));
             }
         });
 
@@ -84,6 +91,7 @@ ImageView Setting;
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         finish();
                     }
 
